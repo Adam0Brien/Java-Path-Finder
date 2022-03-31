@@ -50,10 +50,6 @@ public class Controller implements Initializable {
     @FXML
     Label fileSize1;
 
-
-    @FXML
-    AnchorPane anPane;
-
     /**
      * On startup loads the map of the art gallery and makes all the connections for each room
      */
