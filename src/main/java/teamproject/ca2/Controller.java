@@ -26,10 +26,7 @@ public class Controller implements Initializable {
 
 
     /**
-     *
      * Variables
-     *
-     *
      */
 
     public List<Room> rooms = new LinkedList<>();
@@ -57,6 +54,9 @@ public class Controller implements Initializable {
     @FXML
     AnchorPane anPane;
 
+    /**
+     * On startup loads the map of the art gallery and makes all the connections for each room
+     */
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -177,7 +177,7 @@ public class Controller implements Initializable {
      * @param nodeA  Starting Node
      * @param nodeB  End Node
      * @param roomNodes
-     * @return
+     * @return the distance between both nodes
      */
     public int getCost(int nodeA,int nodeB,List<GraphNode<Room>> roomNodes){
         int nodeAX = roomNodes.get(nodeA).data.getXCoord();
