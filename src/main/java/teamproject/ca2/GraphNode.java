@@ -1,18 +1,19 @@
 package teamproject.ca2;
 
-
-//taken from notes
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class GraphNode<T> {
+
     public T data;
-    public List<GraphLink> adjList=new ArrayList<>(); //Adjacency list now contains link objects = key!
+    public int nodeValue= Integer.MAX_VALUE;
+
+    public List<GraphLink> adjList = new ArrayList<>(); //Adjacency list now contains link objects = key!
     //Could use any concrete List implementation
     public GraphNode(T data) {
         this.data=data;
     }
+
     public void connectToNodeDirected(GraphNode<T> destNode,int cost) {
         adjList.add( new GraphLink(destNode,cost) ); //Add new link object to source adjacency list
     }
