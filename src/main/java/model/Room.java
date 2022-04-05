@@ -1,4 +1,4 @@
-package teamproject.ca2;
+package model;
 
 public class Room {
 

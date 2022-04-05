@@ -60,7 +60,7 @@
                         <!-- Default configuration for running with: mvn clean javafx:run -->
                         <id>default-cli</id>
                         <configuration>
-                            <mainClass>teamproject.ca2/teamproject.ca2.Driver</mainClass>
+                            <mainClass>teamproject.ca2/main.Driver</mainClass>
                         </configuration>
                     </execution>
                 </executions>

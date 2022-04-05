@@ -1,11 +1,10 @@
-package teamproject.ca2;
+package utils;
 
 
 //taken from notes
 
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class CostOfPath {

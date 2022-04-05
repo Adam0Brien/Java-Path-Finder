@@ -1,4 +1,4 @@
-package teamproject.ca2;
+package controller;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -11,10 +11,10 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Text;
+import utils.GraphLink;
+import utils.GraphNode;
+import model.Room;
 
 import java.io.BufferedReader;
 import java.io.File;
