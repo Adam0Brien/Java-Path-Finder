@@ -1,4 +1,4 @@
-package teamproject.ca2;
+package utils;
 
 import java.util.ArrayList;
 import java.util.List;
