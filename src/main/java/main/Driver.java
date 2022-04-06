@@ -10,7 +10,7 @@ import java.io.IOException;
 public class Driver extends Application {
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(Driver.class.getResource("gallery.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/FXML/gallery.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 925, 614);
         stage.setTitle("National Gallery Route Finder");
         stage.setScene(scene);
