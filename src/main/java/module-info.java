@@ -2,8 +2,6 @@ module teamproject.ca2 {
     requires javafx.controls;
     requires javafx.fxml;
 
-
-    opens teamproject.ca2 to javafx.fxml;
     exports main;
     opens main to javafx.fxml;
     exports controller;
