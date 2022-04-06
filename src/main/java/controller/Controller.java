@@ -261,7 +261,7 @@ public class Controller implements Initializable {
 
 
     /**
-     * Draws a lone between two nodes
+     * Draws a line between two nodes
      * @param nodeA starting node
      * @param nodeB destination node
      */
