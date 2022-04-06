@@ -1,8 +1,10 @@
-package utils;
+package model;
 
 
 //taken from notes
 
+
+import model.GraphNode;
 
 import java.util.ArrayList;
 import java.util.Collections;

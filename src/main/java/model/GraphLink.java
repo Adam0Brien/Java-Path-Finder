@@ -1,4 +1,4 @@
-package utils;
+package model;
 
 
 //taken from notes

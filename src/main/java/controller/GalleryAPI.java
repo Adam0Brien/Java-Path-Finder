@@ -3,7 +3,7 @@ package controller;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import model.Room;
-import utils.GraphNode;
+import model.GraphNode;
 
 import java.util.LinkedList;
 import java.util.List;

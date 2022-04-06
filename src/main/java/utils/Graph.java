@@ -1,5 +1,8 @@
 package utils;
 
+import model.CostOfPath;
+import model.GraphLink;
+import model.GraphNode;
 import model.Room;
 
 import java.util.ArrayList;

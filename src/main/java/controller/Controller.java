@@ -13,8 +13,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import utils.Graph;
-import utils.GraphLink;
-import utils.GraphNode;
+import model.GraphNode;
 import model.Room;
 
 import java.io.BufferedReader;
