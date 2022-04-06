@@ -19,4 +19,14 @@ public class GalleryAPI {
         this.names = FXCollections.observableArrayList();
         this. roomNodes = new LinkedList<>();
     }
+
+    public void findShortestRoute() {
+        //using the CostOfPath class here... somewhere anyways
+    }
+
+
+    //We could generate ALL routes and use something like noise reduction to take away all the super long ones
+    public void generateMultipleRoutes() {
+
+    }
 }
