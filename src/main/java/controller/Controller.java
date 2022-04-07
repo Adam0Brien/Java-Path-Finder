@@ -12,6 +12,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
+import main.Driver;
 import utils.Graph;
 import model.GraphNode;
 import model.Room;
@@ -25,32 +26,16 @@ import java.util.*;
 
 public class Controller implements Initializable {
 
-
-    /**
-     * Variables
-     */
-
-    public List<Room> rooms = new LinkedList<>();
-    public ObservableList<String> names = FXCollections.observableArrayList();
-    public List<GraphNode<Room>> roomNodes = new LinkedList<>();
-
-
     @FXML
     ImageView view;
     @FXML
     ImageView finalView;
     @FXML
-    Label fileName;
-    @FXML
-    Label fileSize;
-    @FXML
-    Label fileName1;
-    @FXML
-    Label fileSize1;
-    @FXML
     ComboBox<String> start, destination;
     @FXML
     AnchorPane anchorpane;
+
+    private GalleryAPI galleryAPI;
 
     /**
      * On startup loads the map of the art gallery and makes all the connections for each room
@@ -58,9 +43,8 @@ public class Controller implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        Image image = new Image(getClass().getResourceAsStream("/images/floorplan-level-2-july-2020.jpg"));
-        view.setImage(image);
-        finalView.setImage(image);
+        galleryAPI = Driver.galleryAPI;
+        view.setImage(galleryAPI.getGalleryImage());
 
 
 //        String line = "";
@@ -171,36 +155,36 @@ public class Controller implements Initializable {
         });
     }
 
-    public void breadthFirstSearch(ActionEvent event) {
-        System.out.println(Graph.findPathBreadthFirstInterface(roomNodes.get(0),roomNodes.get(9)));
-    }
+//    public void breadthFirstSearch(ActionEvent event) {
+//        System.out.println(Graph.findPathBreadthFirstInterface(roomNodes.get(0),roomNodes.get(9)));
+//    }
 
 
 
 
 
-    /**
-     * Draws a line between two nodes
-     * @param nodeA starting node
-     * @param nodeB destination node
-     */
-    public void drawLine(int nodeA, int nodeB) {
-        int nodeAX = roomNodes.get(nodeA).data.getXCoord();
-        int nodeAY = roomNodes.get(nodeA).data.getYCoord();
-        int nodeBX = roomNodes.get(nodeB).data.getXCoord();
-        int nodeBY = roomNodes.get(nodeB).data.getYCoord();
-
-        Line line = new Line(nodeAX, nodeAY, nodeBX, nodeBY);
-        line.setStartX(nodeAX);
-        line.setStartY(nodeAY);
-        line.setEndX(nodeBX);
-        line.setEndY(nodeBY);
-        line.setFill(Color.LIMEGREEN);
-        line.setStrokeWidth(2);
-        line.setLayoutX(view.getLayoutX());
-        line.setLayoutY(view.getLayoutY());
-        ((AnchorPane) view.getParent()).getChildren().add(line);
-    }
+//    /**
+//     * Draws a line between two nodes
+//     * @param nodeA starting node
+//     * @param nodeB destination node
+//     */
+//    public void drawLine(int nodeA, int nodeB) {
+//        int nodeAX = roomNodes.get(nodeA).data.getXCoord();
+//        int nodeAY = roomNodes.get(nodeA).data.getYCoord();
+//        int nodeBX = roomNodes.get(nodeB).data.getXCoord();
+//        int nodeBY = roomNodes.get(nodeB).data.getYCoord();
+//
+//        Line line = new Line(nodeAX, nodeAY, nodeBX, nodeBY);
+//        line.setStartX(nodeAX);
+//        line.setStartY(nodeAY);
+//        line.setEndX(nodeBX);
+//        line.setEndY(nodeBY);
+//        line.setFill(Color.LIMEGREEN);
+//        line.setStrokeWidth(2);
+//        line.setLayoutX(view.getLayoutX());
+//        line.setLayoutY(view.getLayoutY());
+//        ((AnchorPane) view.getParent()).getChildren().add(line);
+//    }
 
 }
 
