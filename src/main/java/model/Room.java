@@ -3,6 +3,7 @@ package model;
 public class Room {
 
     private String roomName;
+    private String exhibits;
     private int xCoord;
     private int yCoord;
 
