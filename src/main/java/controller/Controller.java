@@ -155,6 +155,10 @@ public class Controller implements Initializable {
         });
     }
 
+    public void breadthFirstSearch(ActionEvent actionEvent) {
+
+    }
+
 //    public void breadthFirstSearch(ActionEvent event) {
 //        System.out.println(Graph.findPathBreadthFirstInterface(roomNodes.get(0),roomNodes.get(9)));
 //    }
