@@ -6,6 +6,7 @@ import javafx.scene.image.Image;
 import model.GraphLink;
 import model.Room;
 import model.GraphNode;
+import utils.Graph;
 
 import java.io.*;
 import java.security.cert.CertificateRevokedException;
@@ -43,7 +44,10 @@ public class GalleryAPI {
 
 
     //We could generate ALL routes and use something like noise reduction to take away all the super long ones
-    public void generateMultipleRoutes() {
+    public List<List<GraphNode<?>>> generateMultipleRoutes(String start, String destination) {
+        GraphNode<Room> startNode = hashMap.get(start);
+        GraphNode<Room> destNode = hashMap.get(destination);
+        return Graph.findAllPathsDepthFirst(startNode,null, destNode);
     }
 
     private void readInDatabase() {
