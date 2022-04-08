@@ -28,14 +28,6 @@ public class Graph {
         return (int) Math.sqrt(nodeBX - nodeAX) * (nodeBX - nodeAX) + (nodeBY - nodeAY) * (nodeBY - nodeAY);
     }
 
-    /**
-     * @param nodeA     Starting node
-     * @param nodeB     End node
-     * @param roomNodes
-     */
-    public static void connectNodes(int nodeA, int nodeB, List<GraphNode<Room>> roomNodes) {
-        roomNodes.get(nodeA).connectToNodeUndirected(roomNodes.get(nodeB), getCost(nodeA, nodeB, roomNodes));
-    }
 
     /**
      * BreadthFirstSearch taken from notes
