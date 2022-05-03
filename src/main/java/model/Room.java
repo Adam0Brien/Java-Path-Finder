@@ -6,12 +6,14 @@ public class Room {
     private String exhibit;
     private int xCoord;
     private int yCoord;
+    private String date;
 
-
-    public Room(String roomName, int xCoord, int yCoord) {
+    public Room(String roomName, int xCoord, int yCoord,String exhibit,String date) {
         this.roomName = roomName;
         this.xCoord = xCoord;
         this.yCoord = yCoord;
+        this.exhibit = exhibit;
+        this.date = date;
     }
 
     public String getRoomName() {

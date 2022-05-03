@@ -21,16 +21,20 @@ public class GalleryAPI {
     private ObservableList<String> names;
     private List<GraphNode<Room>> roomNodes;
     private Image galleryImage;
+    private List<GraphNode<Room>> avoidedRooms;
 
     public GalleryAPI() {
         this.rooms = new LinkedList<>();
         this.names = FXCollections.observableArrayList();
         this.roomNodes = new LinkedList<>();
         this.roomsHashMap = new HashMap<>();
+        this.avoidedRooms = new LinkedList<>();
         this.galleryImage = new Image(getClass().getResourceAsStream("/images/floorplan-level-2-july-2020.jpg"));
         readInDatabase();
         connectRooms();
+       // dijkstrasAlgorithm();
     }
+
 
     public Image getGalleryImage() {
         return galleryImage;
@@ -55,7 +59,8 @@ public class GalleryAPI {
             BufferedReader br = new BufferedReader(new FileReader(file));
             while ((line = br.readLine()) != null) {
                 String[] values = line.split(",");
-                Room r = new Room(values[0], Integer.parseInt(values[1]), Integer.parseInt(values[2]));
+                Room r = new Room(values[0], Integer.parseInt(values[1]), Integer.parseInt(values[2]),values[3],values[4]);
+                System.out.println(values[0] + ", " + values[1] + ", " + values[2] + ", " + values[3] + ", " +values[4]);
                 GraphNode<Room> node = new GraphNode<>(r);
                 roomNodes.add(node);
                 roomsHashMap.put(values[0], node);
@@ -90,16 +95,7 @@ public class GalleryAPI {
         } catch (IOException e) {
             e.printStackTrace();
         }
-//        connectNodes(names.get(0), "Room 2"); // Room 1 + Room 2
-//        connectNodes("Room 4", "Room 2");
-//        connectNodes("Room 6", "Room 4");
-//        connectNodes("Room 5", "Room 4");
-//        connectNodes("Room 6", "Room 7");
-//        connectNodes("Room 7", "Room 8");
-//        connectNodes("Room 8", "Room 9");
-//        connectNodes("Room 9", "Room 10");
-//        connectNodes("Room 9", "Room 51");
-//        connectNodes("Room 9", "Room 15");
+
 
         System.out.println("Rooms Connected");
         System.out.println("-----------------------");
@@ -110,4 +106,46 @@ public class GalleryAPI {
             }
         }
     }
+
+
+    public void avoidRoom(String smellyRoom) {
+        for (GraphNode<Room> n : roomNodes) {
+            for (GraphLink l : n.adjList) {
+                GraphNode<Room> r = (GraphNode<Room>) l.destNode;
+                if (n.data.getRoomName().equals(smellyRoom) || r.data.getRoomName().equals(smellyRoom)){
+                    l.cost = Integer.MAX_VALUE; //makes the cost of the room not worth going through
+                    avoidedRooms.add(r);
+                    System.out.println(avoidedRooms.toString());
+                }
+            }
+        }
+    }
+
+
+
+
+    public void resetAvoidRoom(String smellyRoom) {
+        try {
+            for (GraphNode<Room> n : roomNodes) {
+                for (GraphLink l : n.adjList) {
+                    GraphNode<Room> r = (GraphNode<Room>) l.destNode;
+                    if (n.data.getRoomName().equals(smellyRoom) || r.data.getRoomName().equals(smellyRoom)) {
+                        l.cost = 1; //makes the cost of the room not worth going through
+                        avoidedRooms.remove(r);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("Error: " + e);
+        }
+    }
+
+
+    public void dijkstrasAlgorithm(){
+        Graph.findCheapestPathDijkstra(roomsHashMap.get("Room 1"),roomsHashMap.get("Room2"));
+    }
+
+
+
+
 }
