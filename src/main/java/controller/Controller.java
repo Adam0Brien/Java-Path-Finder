@@ -92,18 +92,11 @@ public class Controller implements Initializable {
     public void addWaypoint() {
         waypointView.getItems().addAll(waypoints.getValue());
         waypointsList.add(waypoints.getValue());
+        galleryAPI.waypoints(waypoints.getValue());
         //System.out.println(waypointsList.toString());
     }
 
 
-    public int findLandmark(ArrayList<Room> array, String name) {
-        for (Room node : array) {
-            if (node.getRoomName().equals(name)) {
-                return array.indexOf(node);
-            }
-        }
-        return -1;
-    }
     public void findPathDij(ActionEvent actionEvent) {
 
         List<GraphNode<?>> pathList = new ArrayList<>();
@@ -151,6 +144,7 @@ public class Controller implements Initializable {
         galleryAPI.avoidRoom(avoidRoom.getValue());
         avoidView.getItems().add(avoidRoom.getValue());
     }
+
 
 //
 //    /**

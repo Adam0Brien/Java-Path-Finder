@@ -173,6 +173,24 @@ public class GalleryAPI {
         }
     }
 
+    public void waypoints(String room) {
+        System.out.println("Room to avoid: " + room);
+        for (GraphNode<Room> n : roomNodes) {
+            System.out.println(n.data.getRoomName());
+            for (GraphLink l : n.adjList) {
+                System.out.println("\t" + l.destNode.data.toString());
+                GraphNode<Room> r = (GraphNode<Room>) l.destNode;
+                if (n.data.getRoomName().equals(room) || r.data.getRoomName().equals(room)){
+                    System.out.println("Blocked");
+                    l.cost = -1000; //makes the cost of the room not worth going through
+                    avoidedRooms.add(r);
+                    System.out.println(l.cost);
+                    //System.out.println(avoidedRooms.toString());
+                }
+            }
+        }
+    }
+
 
 
 
