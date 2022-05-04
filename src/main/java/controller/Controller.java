@@ -8,12 +8,15 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import main.Driver;
+import model.CostOfPath;
 import utils.Graph;
 import model.GraphNode;
 import model.Room;
@@ -37,8 +40,18 @@ public class Controller implements Initializable {
     AnchorPane anchorpane;
     @FXML
     ListView waypointView;
+    @FXML
+    ListView avoidView;
+
+    @FXML
+    AnchorPane mainPane;
+    @FXML
+    ComboBox<String> avoidRoom;
 
     private GalleryAPI galleryAPI;
+    private List<String> waypointsList;
+
+
 
     /**
      * On startup loads the map of the art gallery and makes all the connections for each room
@@ -46,103 +59,15 @@ public class Controller implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        this.waypointsList = new LinkedList<>();
         galleryAPI = Driver.galleryAPI;
         view.setImage(galleryAPI.getGalleryImage());
 
-
-//        String line = "";
-//        try {
-//            BufferedReader br = new BufferedReader(new FileReader("C:\\CA2\\src\\main\\resources\\teamproject\\ca2\\mappings.csv"));
-//
-//            while ((line = br.readLine()) != null) {
-//                String[] values = line.split(",");
-//                Room r = new Room(values[0], Integer.parseInt(values[1]), Integer.parseInt(values[2]));
-//                GraphNode<Room> node = new GraphNode<>(r);
-//                roomNodes.add(node);
-//                names.add(values[0]);
-//                rooms.add(r);
-//            }
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//
-//
-
         start.getItems().addAll(galleryAPI.getNames());
         destination.getItems().addAll(galleryAPI.getNames());
+        avoidRoom.getItems().addAll(galleryAPI.getNames());
         waypoints.getItems().addAll(galleryAPI.getNames());
-//
-//
-//        connectNodes(1, 2, roomNodes);
-//        connectNodes(2, 3, roomNodes);
-//        connectNodes(2, 4, roomNodes);
-//        connectNodes(4, 5, roomNodes);
-//        connectNodes(4, 6, roomNodes);
-//        connectNodes(6, 7, roomNodes);
-//        connectNodes(7, 8, roomNodes);
-//        connectNodes(8, 9, roomNodes);
-//        connectNodes(9, 10, roomNodes);
-//        connectNodes(8, 15, roomNodes);
-//        connectNodes(8, 14, roomNodes);
-//        connectNodes(15, 16, roomNodes);
-//        connectNodes(16, 17, roomNodes);
-//        connectNodes(14, 16, roomNodes);
-//        connectNodes(14, 26, roomNodes);
-//        connectNodes(18, 26, roomNodes);
-//        connectNodes(38, 39, roomNodes);
-//        connectNodes(14, 18, roomNodes);
-//        connectNodes(18, 19, roomNodes);
-//        connectNodes(18, 21, roomNodes);
-//        connectNodes(18, 22, roomNodes);
-//        connectNodes(18, 24, roomNodes);
-//        connectNodes(19, 20, roomNodes);
-//        connectNodes(20, 21, roomNodes);
-//        connectNodes(22, 23, roomNodes);
-//        connectNodes(23, 24, roomNodes);
-//        connectNodes(24, 25, roomNodes);
-//        connectNodes(25, 28, roomNodes);
-//        connectNodes(27, 28, roomNodes);
-//        connectNodes(26, 27, roomNodes);
-//        connectNodes(29, 28, roomNodes);
-//        connectNodes(10, 11, roomNodes);
-//        connectNodes(11, 12, roomNodes);
-//        connectNodes(10, 13, roomNodes);
-//        connectNodes(13, 29, roomNodes);
-//        connectNodes(29, 14, roomNodes);
-//        connectNodes(29, 30, roomNodes);
-//        connectNodes(30, 31, roomNodes);
-//        connectNodes(30, 32, roomNodes);
-//        connectNodes(32, 33, roomNodes);
-//        connectNodes(33, 34, roomNodes);
-//        connectNodes(34, 35, roomNodes);
-//        connectNodes(34, 41, roomNodes);
-//        connectNodes(36, 35, roomNodes);
-//        connectNodes(36, 37, roomNodes);
-//        connectNodes(37, 32, roomNodes);
-//        connectNodes(36, 40, roomNodes);
-//        connectNodes(36, 38, roomNodes);
-//        connectNodes(39, 12, roomNodes);
-//        connectNodes(40, 44, roomNodes);
-//        connectNodes(41, 42, roomNodes);
-//        connectNodes(42, 43, roomNodes);
-//        connectNodes(43, 44, roomNodes);
-//        connectNodes(44, 45, roomNodes);
-//        connectNodes(45, 46, roomNodes);
-//
-//
-//        //still need to do the sainsbury wing
-//
-//
-//        drawLine(0, 1); //testing drawLine it works lol
-//
-//
-//        System.out.println("The following rooms are connected");
-//        for (GraphNode<Room> r : roomNodes) {
-//            System.out.println(r.data.getRoomName());
-//            for (GraphLink l : r.adjList) {
-//                System.out.println(l.destNode.data);
-//            }
-//        }
+
 
     }
 
@@ -165,14 +90,69 @@ public class Controller implements Initializable {
     }
 
     public void addWaypoint() {
-
-
+        waypointView.getItems().addAll(waypoints.getValue());
+        waypointsList.add(waypoints.getValue());
+        //System.out.println(waypointsList.toString());
     }
-//    public void breadthFirstSearch(ActionEvent event) {
-//        System.out.println(Graph.findPathBreadthFirstInterface(roomNodes.get(0),roomNodes.get(9)));
-//    }
 
 
+    public int findLandmark(ArrayList<Room> array, String name) {
+        for (Room node : array) {
+            if (node.getRoomName().equals(name)) {
+                return array.indexOf(node);
+            }
+        }
+        return -1;
+    }
+    public void findPathDij(ActionEvent actionEvent) {
+
+        List<GraphNode<?>> pathList = new ArrayList<>();
+        if (!waypointsList.isEmpty()) {
+           // pathList = waypointSupport(findLandmark((ArrayList<Landmark>) landmarks, startNode.getValue()), findLandmark((ArrayList<Landmark>) landmarks, endNode.getValue()), waypointsArray, landmarkNodes, landmarks);
+        } else {
+            CostOfPath cp = Graph.findCheapestPathDijkstra(galleryAPI.findGraphNode(start.getValue()), galleryAPI.findGraphNode(destination.getValue()).data);
+
+            pathList = cp.pathList;
+            System.out.println(cp.pathCost);
+        }
+
+
+
+        //
+        // Option of doing a hash set however the hash set doesn't keep the path in order
+        //
+        //HashSet<GraphNodeDw<?>> hs = new HashSet<>(pathList);
+        drawSinglePath(pathList,Color.BLUE);
+        for (GraphNode<?> n : pathList) {
+            GraphNode<Room> l = (GraphNode<Room>) n;
+
+        }
+    }
+
+    public void drawSinglePath(List<GraphNode<?>> pathList,Color c) {
+        mainPane.getChildren().clear();
+        for (int i = 0; i < pathList.size(); i++) {
+            GraphNode<Room> node = (GraphNode<Room>) pathList.get(i);
+
+            if (i + 1 < pathList.size()) {
+                GraphNode<Room> nextNode = (GraphNode<Room>) pathList.get(i + 1);
+                Line l = new Line(node.data.getXCoord(), node.data.getYCoord() + 50, nextNode.data.getXCoord(), nextNode.data.getYCoord() + 50);
+                l.setFill(c);
+                l.setStroke(c);
+                l.setStrokeWidth(5);
+                mainPane.getChildren().add(l);
+            }
+
+        }
+    }
+
+
+    public void avoidThisRoom(){
+        galleryAPI.avoidRoom(avoidRoom.getValue());
+        avoidView.getItems().add(avoidRoom.getValue());
+    }
+
+//
 //    /**
 //     * Draws a line between two nodes
 //     * @param nodeA starting node

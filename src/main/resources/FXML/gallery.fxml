@@ -7,15 +7,17 @@
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TreeView?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Controller">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="573.0" prefWidth="1037.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Controller">
   <children>
-    <AnchorPane fx:id="anPane" maxHeight="-1.0" maxWidth="-1.0" prefHeight="636.0" prefWidth="1000.0" VBox.vgrow="ALWAYS">
+    <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="636.0" prefWidth="1000.0" VBox.vgrow="ALWAYS">
          <children>
             <TabPane layoutX="-2.0" prefHeight="638.0" prefWidth="930.0" tabClosingPolicy="UNAVAILABLE">
               <tabs>
@@ -28,26 +30,58 @@
                                     <Font size="26.0" />
                                  </font>
                               </Label>
-                              <ImageView fx:id="view" fitHeight="466.0" fitWidth="418.0" layoutX="40.0" layoutY="96.0" pickOnBounds="true" preserveRatio="true" />
+                              <ImageView fx:id="view" fitHeight="466.0" fitWidth="418.0" layoutX="40.0" layoutY="96.0" pickOnBounds="true" preserveRatio="true" style="-fx-border-color: black;" />
                               <Line endX="-2.0" endY="-58.0" layoutX="494.0" layoutY="59.0" startX="-2.0" startY="563.0" />
-                              <Label alignment="CENTER" layoutX="661.0" layoutY="14.0" prefHeight="30.0" prefWidth="146.0" text="Controller" underline="true" />
                               <Label fx:id="fileName1" layoutX="76.0" layoutY="87.0" prefHeight="17.0" prefWidth="81.0" />
                               <Label fx:id="fileSize1" layoutX="76.0" layoutY="113.0" prefHeight="17.0" prefWidth="65.0" />
-                              <Button layoutX="694.0" layoutY="44.0" mnemonicParsing="false" onAction="#findCoords" text="Find Coords" />
-                              <ComboBox fx:id="start" layoutX="521.0" layoutY="101.0" prefWidth="150.0" promptText="Start" />
-                              <ComboBox fx:id="destination" layoutX="734.0" layoutY="101.0" prefWidth="150.0" promptText="Destination" />
-                              <Button layoutX="507.0" layoutY="498.0" mnemonicParsing="false" onAction="#breadthFirstSearch" text="Dijkstras" />
-                              <ListView fx:id="waypointView" layoutX="507.0" layoutY="241.0" prefHeight="200.0" prefWidth="402.0" />
-                              <Label layoutX="521.0" layoutY="79.0" text="Start" />
-                              <Label layoutX="734.0" layoutY="79.0" text="Destinatiom" />
-                              <ComboBox fx:id="waypoints" layoutX="521.0" layoutY="177.0" prefWidth="150.0" />
-                              <Button layoutX="668.0" layoutY="177.0" mnemonicParsing="false" text="Add Waypoint" />
-                              <Button layoutX="602.0" layoutY="498.0" mnemonicParsing="false" text="BFS" />
-                              <Button layoutX="668.0" layoutY="498.0" mnemonicParsing="false" text="DFS" />
-                              <Label layoutX="521.0" layoutY="152.0" text="Waypoints" />
-                              <Separator layoutX="492.0" layoutY="141.0" prefHeight="4.0" prefWidth="444.0" />
-                              <Separator layoutX="492.0" layoutY="458.0" prefHeight="4.0" prefWidth="444.0" />
-                              <Label layoutX="504.0" layoutY="470.0" text="Algorithms" />
+                              <ComboBox fx:id="start" layoutX="521.0" layoutY="54.0" prefWidth="150.0" promptText="Start" />
+                              <ComboBox fx:id="destination" layoutX="729.0" layoutY="54.0" prefWidth="150.0" promptText="Destination" />
+                              <Button layoutX="507.0" layoutY="312.0" mnemonicParsing="false" onAction="#findPathDij" text="Dijkstras" />
+                              <ListView fx:id="waypointView" layoutX="650.0" layoutY="183.0" prefHeight="89.0" prefWidth="261.0" />
+                              <Label layoutX="521.0" layoutY="28.0" text="Start" />
+                              <Label layoutX="729.0" layoutY="28.0" text="Destination" />
+                              <ComboBox fx:id="waypoints" layoutX="522.0" layoutY="209.0" prefHeight="25.0" prefWidth="104.0" promptText="Waypoints" />
+                              <Button layoutX="523.0" layoutY="242.0" mnemonicParsing="false" onAction="#addWaypoint" prefHeight="25.0" prefWidth="103.0" text="Add Waypoint" />
+                              <Button layoutX="578.0" layoutY="312.0" mnemonicParsing="false" text="Breadth-First Search" />
+                              <Button layoutX="708.0" layoutY="312.0" mnemonicParsing="false" text="Depth-First Search" />
+                              <Label layoutX="526.0" layoutY="170.0" text="Waypoints" textFill="#9f9f9f">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font></Label>
+                              <Separator layoutX="492.0" layoutY="168.0" prefHeight="4.0" prefWidth="444.0" />
+                              <Separator layoutX="492.0" layoutY="350.0" prefHeight="4.0" prefWidth="444.0" />
+                              <Label layoutX="509.0" layoutY="278.0" text="Algorithms" textFill="#9f9f9f">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font></Label>
+                              <AnchorPane fx:id="mainPane" layoutX="41.0" layoutY="45.0" prefHeight="419.0" prefWidth="416.0">
+                              </AnchorPane>
+                              <ComboBox fx:id="avoidRoom" layoutX="521.0" layoutY="109.0" prefHeight="25.0" prefWidth="106.0" promptText="Room" />
+                              <Label layoutX="522.0" layoutY="88.0" text="Avoid" />
+                              <Button layoutX="627.0" layoutY="109.0" mnemonicParsing="false" onAction="#avoidThisRoom" text="Avoid" />
+                              <Separator layoutX="492.0" layoutY="276.0" prefHeight="4.0" prefWidth="444.0" />
+                              <TreeView layoutX="507.0" layoutY="391.0" prefHeight="146.0" prefWidth="200.0" />
+                              <Label layoutX="509.0" layoutY="360.0" text="Tree view" textFill="#9f9f9f">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Label>
+                              <Separator layoutX="726.0" layoutY="354.0" orientation="VERTICAL" prefHeight="201.0" prefWidth="6.0" />
+                              <Label layoutX="738.0" layoutY="355.0" text="Settings" textFill="#9f9f9f">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Label>
+                              <TextField layoutX="741.0" layoutY="406.0" prefHeight="25.0" prefWidth="57.0" />
+                              <Button layoutX="798.0" layoutY="406.0" mnemonicParsing="false" text="Button" />
+                              <Label layoutX="741.0" layoutY="389.0" text="Label" />
+                              <Label layoutX="522.0" layoutY="1.0" text="Room Selection" textFill="#9f9f9f">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Label>
+                              <ListView layoutX="698.0" layoutY="90.0" prefHeight="75.0" prefWidth="200.0" fx:id="avoidView"/>
+                              <Button layoutX="532.0" layoutY="137.0" mnemonicParsing="false" text="Clear Avoided Rooms" />
                            </children>
                         </AnchorPane>
                      </content>

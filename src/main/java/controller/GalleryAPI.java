@@ -20,12 +20,12 @@ public class GalleryAPI {
     private List<GraphNode<Room>> roomNodes;
     private Image galleryImage;
     private List<GraphNode<Room>> avoidedRooms;
-    private List<String> waypoints;
+
 
     public GalleryAPI() {
         this.rooms = new LinkedList<>();
         this.names = new ArrayList<>();
-        this.waypoints = new LinkedList<>();
+
         this.roomNodes = new LinkedList<>();
         this.roomsHashMap = new HashMap<>();
         this.avoidedRooms = new LinkedList<>();
@@ -34,6 +34,26 @@ public class GalleryAPI {
         connectRooms();
 
        //dijkstrasAlgorithm();
+    }
+
+    public List<Room> getRooms() {
+        return rooms;
+    }
+
+    public void setRooms(List<Room> rooms) {
+        this.rooms = rooms;
+    }
+
+    public List<GraphNode<Room>> getRoomNodes() {
+        return roomNodes;
+    }
+
+    public void setRoomNodes(List<GraphNode<Room>> roomNodes) {
+        this.roomNodes = roomNodes;
+    }
+
+    public GraphNode<Room> findGraphNode(String roomName){
+        return roomsHashMap.get(roomName);
     }
 
     public List<String> getNames() {
@@ -105,25 +125,30 @@ public class GalleryAPI {
         }
 
 
-        System.out.println("Rooms Connected");
-        System.out.println("-----------------------");
-        for (GraphNode<Room> room : roomNodes){
-            System.out.println(room.data.getRoomName());
-            for (GraphLink adj : room.adjList){
-                System.out.println(adj.destNode.data);
-            }
-        }
+//        System.out.println("Rooms Connected");
+//        System.out.println("-----------------------");
+//        for (GraphNode<Room> room : roomNodes){
+//            System.out.println(room.data.getRoomName());
+//            for (GraphLink adj : room.adjList){
+//                System.out.println(adj.destNode.data);
+//            }
+//        }
     }
 
 
     public void avoidRoom(String smellyRoom) {
+        System.out.println("Room to avoid: " + smellyRoom);
         for (GraphNode<Room> n : roomNodes) {
+            System.out.println(n.data.getRoomName());
             for (GraphLink l : n.adjList) {
+                System.out.println("\t" + l.destNode.data.toString());
                 GraphNode<Room> r = (GraphNode<Room>) l.destNode;
                 if (n.data.getRoomName().equals(smellyRoom) || r.data.getRoomName().equals(smellyRoom)){
-                    l.cost = Integer.MAX_VALUE; //makes the cost of the room not worth going through
+                    System.out.println("Blocked");
+                    l.cost = 1000; //makes the cost of the room not worth going through
                     avoidedRooms.add(r);
-                    System.out.println(avoidedRooms.toString());
+                    System.out.println(l.cost);
+                    //System.out.println(avoidedRooms.toString());
                 }
             }
         }
@@ -148,10 +173,6 @@ public class GalleryAPI {
         }
     }
 
-
-    public void dijkstrasAlgorithm(){
-        Graph.findCheapestPathDijkstra(roomsHashMap.get("Room 1"),roomsHashMap.get("Room2"));
-    }
 
 
 
