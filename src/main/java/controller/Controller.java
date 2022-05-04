@@ -64,8 +64,9 @@ public class Controller implements Initializable {
 //        }
 //
 //
-//        start.setItems(names);
-//        destination.setItems(names);
+
+        start.getItems().addAll(galleryAPI.getNames());
+        destination.getItems().addAll(galleryAPI.getNames());
 //
 //
 //        connectNodes(1, 2, roomNodes);
@@ -162,9 +163,6 @@ public class Controller implements Initializable {
 //    public void breadthFirstSearch(ActionEvent event) {
 //        System.out.println(Graph.findPathBreadthFirstInterface(roomNodes.get(0),roomNodes.get(9)));
 //    }
-
-
-
 
 
 //    /**

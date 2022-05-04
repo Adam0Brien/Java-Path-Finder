@@ -9,32 +9,38 @@ import model.GraphNode;
 import utils.Graph;
 
 import java.io.*;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 
 public class GalleryAPI {
 
     private List<Room> rooms;
     private HashMap<String, GraphNode<Room>> roomsHashMap;
-    private ObservableList<String> names;
+    private List<String> names;
     private List<GraphNode<Room>> roomNodes;
     private Image galleryImage;
     private List<GraphNode<Room>> avoidedRooms;
 
     public GalleryAPI() {
         this.rooms = new LinkedList<>();
-        this.names = FXCollections.observableArrayList();
+        this.names = new ArrayList<>();
         this.roomNodes = new LinkedList<>();
         this.roomsHashMap = new HashMap<>();
         this.avoidedRooms = new LinkedList<>();
         this.galleryImage = new Image(getClass().getResourceAsStream("/images/floorplan-level-2-july-2020.jpg"));
         readInDatabase();
         connectRooms();
-       // dijkstrasAlgorithm();
+
+       //dijkstrasAlgorithm();
     }
 
+    public List<String> getNames() {
+        return names;
+    }
+
+    public void setNames(List<String> names) {
+        this.names = names;
+    }
 
     public Image getGalleryImage() {
         return galleryImage;
