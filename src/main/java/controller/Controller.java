@@ -7,6 +7,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -31,9 +32,11 @@ public class Controller implements Initializable {
     @FXML
     ImageView finalView;
     @FXML
-    ComboBox<String> start, destination;
+    ComboBox<String> start, destination,waypoints;
     @FXML
     AnchorPane anchorpane;
+    @FXML
+    ListView waypointView;
 
     private GalleryAPI galleryAPI;
 
@@ -67,6 +70,7 @@ public class Controller implements Initializable {
 
         start.getItems().addAll(galleryAPI.getNames());
         destination.getItems().addAll(galleryAPI.getNames());
+        waypoints.getItems().addAll(galleryAPI.getNames());
 //
 //
 //        connectNodes(1, 2, roomNodes);
@@ -160,6 +164,10 @@ public class Controller implements Initializable {
 
     }
 
+    public void addWaypoint() {
+
+
+    }
 //    public void breadthFirstSearch(ActionEvent event) {
 //        System.out.println(Graph.findPathBreadthFirstInterface(roomNodes.get(0),roomNodes.get(9)));
 //    }

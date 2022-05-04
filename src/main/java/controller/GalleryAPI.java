@@ -20,10 +20,12 @@ public class GalleryAPI {
     private List<GraphNode<Room>> roomNodes;
     private Image galleryImage;
     private List<GraphNode<Room>> avoidedRooms;
+    private List<String> waypoints;
 
     public GalleryAPI() {
         this.rooms = new LinkedList<>();
         this.names = new ArrayList<>();
+        this.waypoints = new LinkedList<>();
         this.roomNodes = new LinkedList<>();
         this.roomsHashMap = new HashMap<>();
         this.avoidedRooms = new LinkedList<>();
