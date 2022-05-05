@@ -3,6 +3,7 @@ package controller;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.image.Image;
+import model.CostOfPath;
 import model.GraphLink;
 import model.Room;
 import model.GraphNode;
@@ -23,9 +24,9 @@ public class GalleryAPI {
 
 
     public GalleryAPI() {
+
         this.rooms = new LinkedList<>();
         this.names = new ArrayList<>();
-
         this.roomNodes = new LinkedList<>();
         this.roomsHashMap = new HashMap<>();
         this.avoidedRooms = new LinkedList<>();
@@ -33,7 +34,14 @@ public class GalleryAPI {
         readInDatabase();
         connectRooms();
 
-       //dijkstrasAlgorithm();
+    }
+
+    public List<GraphNode<Room>> getAvoidedRooms() {
+        return avoidedRooms;
+    }
+
+    public void setAvoidedRooms(List<GraphNode<Room>> avoidedRooms) {
+        this.avoidedRooms = avoidedRooms;
     }
 
     public List<Room> getRooms() {
@@ -52,7 +60,7 @@ public class GalleryAPI {
         this.roomNodes = roomNodes;
     }
 
-    public GraphNode<Room> findGraphNode(String roomName){
+    public GraphNode<Room> findGraphNode(String roomName) {
         return roomsHashMap.get(roomName);
     }
 
@@ -87,8 +95,8 @@ public class GalleryAPI {
             BufferedReader br = new BufferedReader(new FileReader(file));
             while ((line = br.readLine()) != null) {
                 String[] values = line.split(",");
-                Room r = new Room(values[0], Integer.parseInt(values[1]), Integer.parseInt(values[2]),values[3],values[4]);
-                System.out.println(values[0] + ", " + values[1] + ", " + values[2] + ", " + values[3] + ", " +values[4]);
+                Room r = new Room(values[0], Integer.parseInt(values[1]), Integer.parseInt(values[2]), values[3], values[4]);
+                System.out.println(values[0] + ", " + values[1] + ", " + values[2] + ", " + values[3] + ", " + values[4]);
                 GraphNode<Room> node = new GraphNode<>(r);
                 roomNodes.add(node);
                 roomsHashMap.put(values[0], node);
@@ -143,7 +151,7 @@ public class GalleryAPI {
             for (GraphLink l : n.adjList) {
                 System.out.println("\t" + l.destNode.data.toString());
                 GraphNode<Room> r = (GraphNode<Room>) l.destNode;
-                if (n.data.getRoomName().equals(smellyRoom) || r.data.getRoomName().equals(smellyRoom)){
+                if (n.data.getRoomName().equals(smellyRoom) || r.data.getRoomName().equals(smellyRoom)) {
                     System.out.println("Blocked");
                     l.cost = 1000; //makes the cost of the room not worth going through
                     avoidedRooms.add(r);
@@ -153,8 +161,6 @@ public class GalleryAPI {
             }
         }
     }
-
-
 
 
     public void resetAvoidRoom(String smellyRoom) {
@@ -172,9 +178,6 @@ public class GalleryAPI {
             System.out.println("Error: " + e);
         }
     }
-
-
-
 
 
 }

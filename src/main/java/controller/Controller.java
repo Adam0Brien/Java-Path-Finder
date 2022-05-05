@@ -1,18 +1,12 @@
 package controller;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import main.Driver;
@@ -21,9 +15,6 @@ import utils.Graph;
 import model.GraphNode;
 import model.Room;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.net.URL;
 import java.util.*;
@@ -96,7 +87,7 @@ public class Controller implements Initializable {
     }
 
 
-    public int findLandmark(ArrayList<Room> array, String name) {
+    public int findRoom(ArrayList<Room> array, String name) {
         for (Room node : array) {
             if (node.getRoomName().equals(name)) {
                 return array.indexOf(node);
@@ -108,7 +99,7 @@ public class Controller implements Initializable {
 
         List<GraphNode<?>> pathList = new ArrayList<>();
         if (!waypointsList.isEmpty()) {
-           // pathList = waypointSupport(findLandmark((ArrayList<Landmark>) landmarks, startNode.getValue()), findLandmark((ArrayList<Landmark>) landmarks, endNode.getValue()), waypointsArray, landmarkNodes, landmarks);
+            //pathList = galleryAPI.waypointSupport(findRoom((ArrayList<Room>) galleryAPI.getRooms(), start.getValue()), findRoom((ArrayList<Room>) galleryAPI.getRooms(), destination.getValue()), waypointsList.get, galleryAPI.getRoomNodes(), galleryAPI.getRooms());
         } else {
             CostOfPath cp = Graph.findCheapestPathDijkstra(galleryAPI.findGraphNode(start.getValue()), galleryAPI.findGraphNode(destination.getValue()).data);
 
@@ -147,10 +138,29 @@ public class Controller implements Initializable {
     }
 
 
-    public void avoidThisRoom(){
-        galleryAPI.avoidRoom(avoidRoom.getValue());
-        avoidView.getItems().add(avoidRoom.getValue());
+    public void avoidThisRoom() {
+        if (galleryAPI.getAvoidedRooms().contains(galleryAPI.findGraphNode(avoidRoom.getValue()))) return;
+            galleryAPI.avoidRoom(avoidRoom.getValue());
+            avoidView.getItems().add(avoidRoom.getValue());
+            avoidRoom.getItems().remove(avoidRoom.getValue());
+
     }
+
+
+    public void updateSelectionsStart(){
+
+    }
+
+    public void updateSelectionsAvoid(){
+
+    }
+
+
+    public void updateSelectionsDestination(){
+
+    }
+
+
 
 //
 //    /**
