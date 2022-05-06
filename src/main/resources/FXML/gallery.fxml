@@ -33,8 +33,9 @@
                               <Label layoutX="729.0" layoutY="28.0" text="Destination" />
                               <ComboBox fx:id="waypoints" layoutX="522.0" layoutY="209.0" prefHeight="25.0" prefWidth="104.0" promptText="Waypoints" />
                               <Button layoutX="523.0" layoutY="242.0" mnemonicParsing="false" onAction="#addWaypoint" prefHeight="25.0" prefWidth="103.0" text="Add Waypoint" />
-                              <Button layoutX="578.0" layoutY="312.0" mnemonicParsing="false" text="Breadth-First Search" />
-                              <Button layoutX="708.0" layoutY="312.0" mnemonicParsing="false" text="Depth-First Search" />
+                              <Button layoutX="578.0" layoutY="312.0" mnemonicParsing="false" onAction="#findbreadthpath" text="Breadth-First Search" />
+                              <Button layoutX="708.0" layoutY="312.0" mnemonicParsing="false" onAction="#findAllDepthpaths" text="All Depth First" />
+                              <Button layoutX="708.0" layoutY="312.0" mnemonicParsing="false" onAction="#findDepthpath" text="Depth-First Search" />
                               <Label layoutX="526.0" layoutY="170.0" text="Waypoints" textFill="#9f9f9f">
                                  <font>
                                     <Font size="18.0" />
@@ -72,7 +73,8 @@
                                  </font>
                               </Label>
                               <ListView fx:id="avoidView" layoutX="698.0" layoutY="90.0" prefHeight="75.0" prefWidth="200.0" />
-                              <Button layoutX="532.0" layoutY="137.0" mnemonicParsing="false" text="Clear Avoided Rooms"  onAction="#clearAvoidedRooms"/>
+                              <Button layoutX="532.0" layoutY="137.0" mnemonicParsing="false" text="Clear Avoided Rooms" />
+                              <Button layoutX="709.0" layoutY="279.0" mnemonicParsing="false" onAction="#findAllDepthpaths" prefHeight="26.0" prefWidth="111.0" text="All Depth First" />
                            </children>
                         </AnchorPane>
                      </content>

@@ -76,9 +76,6 @@ public class Controller implements Initializable {
         });
     }
 
-    public void breadthFirstSearch(ActionEvent actionEvent) {
-
-    }
 
     public void addWaypoint() {
         waypointView.getItems().addAll(waypoints.getValue());
@@ -95,6 +92,76 @@ public class Controller implements Initializable {
         }
         return -1;
     }
+
+    public void findDepthpath (ActionEvent actionEvent){
+        List<GraphNode<?>> newPath = new ArrayList<>();
+        if (!waypointsList.isEmpty()) {
+            //pathList = galleryAPI.waypointSupport(findRoom((ArrayList<Room>) galleryAPI.getRooms(), start.getValue()), findRoom((ArrayList<Room>) galleryAPI.getRooms(), destination.getValue()), waypointsList.get, galleryAPI.getRoomNodes(), galleryAPI.getRooms());
+        } else {
+            CostOfPath cp = Graph.searchGraphDepthFirstCheapestPath(galleryAPI.findGraphNode(start.getValue()), null, 0, galleryAPI.findGraphNode(destination.getValue()).data);
+
+            newPath = cp.pathList;
+            System.out.println(cp.pathCost);
+        }
+
+        //
+        // Option of doing a hash set however the hash set doesn't keep the path in order
+        //
+        //HashSet<GraphNodeDw<?>> hs = new HashSet<>(pathList);
+        drawSinglePath(newPath,Color.RED);
+        for (GraphNode<?> n : newPath) {
+            GraphNode<Room> l = (GraphNode<Room>) n;
+
+        }
+
+    }
+
+    public void findAllDepthpaths (ActionEvent actionEvent){
+        List<List<GraphNode<?>>> t;
+        if (!waypointsList.isEmpty()) {
+            //pathList = galleryAPI.waypointSupport(findRoom((ArrayList<Room>) galleryAPI.getRooms(), start.getValue()), findRoom((ArrayList<Room>) galleryAPI.getRooms(), destination.getValue()), waypointsList.get, galleryAPI.getRoomNodes(), galleryAPI.getRooms());
+        } else {
+            t = Graph. findAllPathsDepthFirst(galleryAPI.findGraphNode(start.getValue()), null, galleryAPI.findGraphNode(destination.getValue()).data);
+            for(List<GraphNode<?>> list : t){
+                System.out.println("Route");
+                for (GraphNode<?> node : list){
+                    Room room = (Room) node.data;
+                    System.out.println("\t" + room.getRoomName());
+                }
+            }
+        }
+
+
+
+    }
+
+
+
+    public void findbreadthpath (ActionEvent actionEvent) {
+        List<GraphNode<?>> nextPath = new ArrayList<>();
+        if (!waypointsList.isEmpty()) {
+            //pathList = galleryAPI.waypointSupport(findRoom((ArrayList<Room>) galleryAPI.getRooms(), start.getValue()), findRoom((ArrayList<Room>) galleryAPI.getRooms(), destination.getValue()), waypointsList.get, galleryAPI.getRoomNodes(), galleryAPI.getRooms());
+        } else {
+            //CostOfPath cp = Graph.findPathBreadthFirst(galleryAPI.findGraphNode(start.getValue()),  galleryAPI.findGraphNode(destination.getValue()).data);
+              nextPath  = Graph.findPathBreadthFirstInterface(galleryAPI.findGraphNode(start.getValue()),galleryAPI.findGraphNode(destination.getValue()).data);
+
+          //  nextPath = cp.pathList;
+          //  System.out.println(cp.pathCost);
+        }
+
+        //
+        // Option of doing a hash set however the hash set doesn't keep the path in order
+        //
+        //HashSet<GraphNodeDw<?>> hs = new HashSet<>(pathList);
+        drawSinglePath(nextPath,Color.PURPLE);
+        for (GraphNode<?> n : nextPath) {
+            GraphNode<Room> l = (GraphNode<Room>) n;
+
+        }
+
+    }
+
+
     public void findPathDij(ActionEvent actionEvent) {
 
         List<GraphNode<?>> pathList = new ArrayList<>();
@@ -106,6 +173,8 @@ public class Controller implements Initializable {
             pathList = cp.pathList;
             System.out.println(cp.pathCost);
         }
+
+
 
 
 

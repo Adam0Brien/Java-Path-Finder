@@ -83,16 +83,19 @@ public class Graph {
             return result; //Return the path permutations list
         }
         if(encountered==null) encountered=new ArrayList<>(); //First node so create new (empty) encountered list
-        encountered.add(from); //Add current node to encountered list
-        for(GraphLink adjNode : from.adjList){
-            if(!encountered.contains(adjNode)) {
-                temp2=findAllPathsDepthFirst(adjNode.destNode,new ArrayList<>(encountered),lookingfor); //Use clone of encountered list
+        if(!encountered.contains(from)) {
+            encountered.add(from); //Add current node to encountered list
+            for (GraphLink adjNode : from.adjList) {
+                if (!encountered.contains(adjNode)) {
+                    temp2 = findAllPathsDepthFirst(adjNode.destNode, new ArrayList<>(encountered), lookingfor); //Use clone of encountered list
 //for recursive call!
-                if(temp2!=null) { //Result of the recursive call contains one or more paths to the solution node
-                    for(List<GraphNode<?>> x : temp2) //For each partial path list returned
-                        x.add(0,from); //Add the current node to the front of each path list
-                    if(result==null) result=temp2; //If this is the first set of solution paths found use it as the result
-                    else result.addAll(temp2); //Otherwise append them to the previously found paths
+                    if (temp2 != null) { //Result of the recursive call contains one or more paths to the solution node
+                        for (List<GraphNode<?>> x : temp2) //For each partial path list returned
+                            x.add(0, from); //Add the current node to the front of each path list
+                        if (result == null)
+                            result = temp2; //If this is the first set of solution paths found use it as the result
+                        else result.addAll(temp2); //Otherwise append them to the previously found paths
+                    }
                 }
             }
         }
@@ -125,6 +128,7 @@ public class Graph {
         return allPaths.isEmpty() ? null : Collections.min(allPaths, (p1, p2) -> p1.pathCost - p2.pathCost);
 
     }
+
 
     public static <T> CostOfPath findCheapestPathDijkstra(GraphNode<?> startNode, T lookingfor){
         CostOfPath cp = new CostOfPath(); //Create result object for cheapest path
@@ -173,7 +177,6 @@ public class Graph {
         }while(!unencountered.isEmpty());
         return null; //No path found, so return null
     }
-
 
 
 
