@@ -7,6 +7,7 @@ import model.CostOfPath;
 import model.GraphLink;
 import model.Room;
 import model.GraphNode;
+import utils.Algo;
 import utils.Graph;
 
 import java.io.*;
@@ -183,14 +184,14 @@ public class GalleryAPI {
         }
     }
 
-    public List<GraphNode<?>> depthWaypointSupport(String start, String destination){
+    public List<GraphNode<?>> depthWaypointSupport(String start, String destination, Algo type){
         List<GraphNode<?>> pathList = new LinkedList<>();
 
         GraphNode<Room> startNode = findGraphNode(start);
 
         for (String waypoint : waypointsList){
             GraphNode<Room> waypointNode = findGraphNode(waypoint);
-            CostOfPath temp = Graph.searchGraphDepthFirstCheapestPath(startNode, null, 0, waypointNode.data);
+            CostOfPath temp = (type.equals(Algo.Depth)) ? Graph.searchGraphDepthFirstCheapestPath(startNode, null, 0, waypointNode.data) :  Graph.findCheapestPathDijkstra(startNode, waypointNode);
             for (GraphNode<?> room : temp.pathList){
                 pathList.add(room);
             }

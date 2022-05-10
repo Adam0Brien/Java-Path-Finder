@@ -13,6 +13,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import main.Driver;
 import model.CostOfPath;
+import utils.Algo;
 import utils.Graph;
 import model.GraphNode;
 import model.Room;
@@ -91,7 +92,7 @@ public class Controller implements Initializable {
     public void findDepthpath (ActionEvent actionEvent){
         List<GraphNode<?>> newPath;
         if (!waypointsList.isEmpty()) {
-            newPath = galleryAPI.depthWaypointSupport(start.getValue(), destination.getValue());
+            newPath = galleryAPI.depthWaypointSupport(start.getValue(), destination.getValue(), Algo.Depth);
         } else {
             CostOfPath cp = Graph.searchGraphDepthFirstCheapestPath(galleryAPI.findGraphNode(start.getValue()), null, 0, galleryAPI.findGraphNode(destination.getValue()).data);
 
