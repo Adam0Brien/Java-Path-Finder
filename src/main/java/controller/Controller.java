@@ -92,7 +92,7 @@ public class Controller implements Initializable {
     public void findDepthpath (ActionEvent actionEvent){
         List<GraphNode<?>> newPath;
         if (!waypointsList.isEmpty()) {
-            newPath = galleryAPI.depthWaypointSupport(start.getValue(), destination.getValue(), Algo.Depth);
+            newPath = galleryAPI.waypointSupport(start.getValue(), destination.getValue(), Algo.Depth);
         } else {
             CostOfPath cp = Graph.searchGraphDepthFirstCheapestPath(galleryAPI.findGraphNode(start.getValue()), null, 0, galleryAPI.findGraphNode(destination.getValue()).data);
 
@@ -159,7 +159,7 @@ public class Controller implements Initializable {
 
         List<GraphNode<?>> pathList = new ArrayList<>();
         if (!waypointsList.isEmpty()) {
-            //pathList = galleryAPI.waypointSupport(findRoom((ArrayList<Room>) galleryAPI.getRooms(), start.getValue()), findRoom((ArrayList<Room>) galleryAPI.getRooms(), destination.getValue()), waypointsList.get, galleryAPI.getRoomNodes(), galleryAPI.getRooms());
+            pathList = galleryAPI.waypointSupport(start.getValue(), destination.getValue(), Algo.Dijkstra);
         } else {
             CostOfPath cp = Graph.findCheapestPathDijkstra(galleryAPI.findGraphNode(start.getValue()), galleryAPI.findGraphNode(destination.getValue()).data);
 

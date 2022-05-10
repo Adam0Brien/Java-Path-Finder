@@ -184,24 +184,20 @@ public class GalleryAPI {
         }
     }
 
-    public List<GraphNode<?>> depthWaypointSupport(String start, String destination, Algo type){
+    public List<GraphNode<?>> waypointSupport(String start, String destination, Algo type){
         List<GraphNode<?>> pathList = new LinkedList<>();
-
+        waypointsList.add(destination);
         GraphNode<Room> startNode = findGraphNode(start);
 
         for (String waypoint : waypointsList){
             GraphNode<Room> waypointNode = findGraphNode(waypoint);
-            CostOfPath temp = (type.equals(Algo.Depth)) ? Graph.searchGraphDepthFirstCheapestPath(startNode, null, 0, waypointNode.data) :  Graph.findCheapestPathDijkstra(startNode, waypointNode);
+            CostOfPath temp = (type.equals(Algo.Depth)) ? Graph.searchGraphDepthFirstCheapestPath(startNode, null, 0, waypointNode.data) :  Graph.findCheapestPathDijkstra(startNode, waypointNode.data);
             for (GraphNode<?> room : temp.pathList){
                 pathList.add(room);
             }
             startNode = waypointNode;
         }
-        CostOfPath cp = Graph.searchGraphDepthFirstCheapestPath(startNode,null, 0,findGraphNode(destination).data);
-
-        for (GraphNode<?> room : cp.pathList){
-            pathList.add(room);
-        }
+        waypointsList.remove(destination);
         return pathList;
     }
 
