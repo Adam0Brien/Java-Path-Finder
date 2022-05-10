@@ -55,8 +55,8 @@ public class Controller implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        this.waypointsList = galleryAPI.getWaypointsList();
         galleryAPI = Driver.galleryAPI;
+        this.waypointsList = galleryAPI.getWaypointsList();
         view.setImage(galleryAPI.getGalleryImage());
 
         start.getItems().addAll(galleryAPI.getNames());
@@ -85,31 +85,20 @@ public class Controller implements Initializable {
     public void addWaypoint() {
         waypointView.getItems().addAll(waypoints.getValue());
         waypointsList.add(waypoints.getValue());
-        //System.out.println(waypointsList.toString());
     }
 
 
     public void findDepthpath (ActionEvent actionEvent){
-        List<GraphNode<?>> newPath = new ArrayList<>();
+        List<GraphNode<?>> newPath;
         if (!waypointsList.isEmpty()) {
-            //pathList = galleryAPI.waypointSupport(findRoom((ArrayList<Room>) galleryAPI.getRooms(), start.getValue()), findRoom((ArrayList<Room>) galleryAPI.getRooms(), destination.getValue()), waypointsList.get, galleryAPI.getRoomNodes(), galleryAPI.getRooms());
+            newPath = galleryAPI.depthWaypointSupport(start.getValue(), destination.getValue());
         } else {
             CostOfPath cp = Graph.searchGraphDepthFirstCheapestPath(galleryAPI.findGraphNode(start.getValue()), null, 0, galleryAPI.findGraphNode(destination.getValue()).data);
 
             newPath = cp.pathList;
             System.out.println(cp.pathCost);
         }
-
-        //
-        // Option of doing a hash set however the hash set doesn't keep the path in order
-        //
-        //HashSet<GraphNodeDw<?>> hs = new HashSet<>(pathList);
         drawSinglePath(newPath,Color.RED);
-        for (GraphNode<?> n : newPath) {
-            GraphNode<Room> l = (GraphNode<Room>) n;
-
-        }
-
     }
 
     public void findAllDepthpaths (ActionEvent actionEvent){
@@ -212,6 +201,15 @@ public class Controller implements Initializable {
         avoidRoom.getItems().clear();
         avoidRoom.getItems().addAll(galleryAPI.getNames());
         avoidRoom.setPromptText("Room");
+    }
+
+    public void resetWaypoints(){
+        waypointView.getItems().clear();
+        galleryAPI.getWaypointsList().clear();
+    }
+
+    public void clearMap(){
+        mainPane.getChildren().clear();
     }
 
 

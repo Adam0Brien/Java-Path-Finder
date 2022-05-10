@@ -10,6 +10,7 @@ import model.GraphNode;
 import utils.Graph;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 
@@ -182,13 +183,23 @@ public class GalleryAPI {
         }
     }
 
-    public List<GraphNode<Room>> depthWaypointSupport(String start, String destination){
-        List<GraphNode<Room>> pathList = new LinkedList<>();
+    public List<GraphNode<?>> depthWaypointSupport(String start, String destination){
+        List<GraphNode<?>> pathList = new LinkedList<>();
 
         GraphNode<Room> startNode = findGraphNode(start);
 
         for (String waypoint : waypointsList){
+            GraphNode<Room> waypointNode = findGraphNode(waypoint);
+            CostOfPath temp = Graph.searchGraphDepthFirstCheapestPath(startNode, null, 0, waypointNode.data);
+            for (GraphNode<?> room : temp.pathList){
+                pathList.add(room);
+            }
+            startNode = waypointNode;
+        }
+        CostOfPath cp = Graph.searchGraphDepthFirstCheapestPath(startNode,null, 0,findGraphNode(destination).data);
 
+        for (GraphNode<?> room : cp.pathList){
+            pathList.add(room);
         }
         return pathList;
     }
