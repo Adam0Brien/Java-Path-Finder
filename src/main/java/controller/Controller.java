@@ -5,6 +5,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TreeItem;
+import javafx.scene.control.TreeView;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
@@ -35,6 +37,9 @@ public class Controller implements Initializable {
     ListView avoidView;
 
     @FXML
+    TreeView<String> routeTreeView;
+
+    @FXML
     AnchorPane mainPane;
     @FXML
     ComboBox<String> avoidRoom;
@@ -50,7 +55,7 @@ public class Controller implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        this.waypointsList = new LinkedList<>();
+        this.waypointsList = galleryAPI.getWaypointsList();
         galleryAPI = Driver.galleryAPI;
         view.setImage(galleryAPI.getGalleryImage());
 
@@ -84,15 +89,6 @@ public class Controller implements Initializable {
     }
 
 
-    public int findRoom(ArrayList<Room> array, String name) {
-        for (Room node : array) {
-            if (node.getRoomName().equals(name)) {
-                return array.indexOf(node);
-            }
-        }
-        return -1;
-    }
-
     public void findDepthpath (ActionEvent actionEvent){
         List<GraphNode<?>> newPath = new ArrayList<>();
         if (!waypointsList.isEmpty()) {
@@ -122,13 +118,20 @@ public class Controller implements Initializable {
             //pathList = galleryAPI.waypointSupport(findRoom((ArrayList<Room>) galleryAPI.getRooms(), start.getValue()), findRoom((ArrayList<Room>) galleryAPI.getRooms(), destination.getValue()), waypointsList.get, galleryAPI.getRoomNodes(), galleryAPI.getRooms());
         } else {
             t = Graph. findAllPathsDepthFirst(galleryAPI.findGraphNode(start.getValue()), null, galleryAPI.findGraphNode(destination.getValue()).data);
+            TreeItem<String> root = new TreeItem<>("Routes");
             for(List<GraphNode<?>> list : t){
-                System.out.println("Route");
+                //System.out.println("Route");
+                TreeItem<String> item = new TreeItem<>("Route");
                 for (GraphNode<?> node : list){
                     Room room = (Room) node.data;
-                    System.out.println("\t" + room.getRoomName());
+                    TreeItem<String> subItem = new TreeItem<>(room.getRoomName());
+                    item.getChildren().add(subItem);
+                    //System.out.println("\t" + room.getRoomName());
                 }
+                root.getChildren().add(item);
             }
+            routeTreeView.setRoot(root);
+            routeTreeView.setShowRoot(false);
         }
 
 
@@ -171,22 +174,11 @@ public class Controller implements Initializable {
             CostOfPath cp = Graph.findCheapestPathDijkstra(galleryAPI.findGraphNode(start.getValue()), galleryAPI.findGraphNode(destination.getValue()).data);
 
             pathList = cp.pathList;
-            System.out.println(cp.pathCost);
+            //System.out.println(cp.pathCost);
         }
 
 
-
-
-
-        //
-        // Option of doing a hash set however the hash set doesn't keep the path in order
-        //
-        //HashSet<GraphNodeDw<?>> hs = new HashSet<>(pathList);
         drawSinglePath(pathList,Color.BLUE);
-        for (GraphNode<?> n : pathList) {
-            GraphNode<Room> l = (GraphNode<Room>) n;
-
-        }
     }
 
     public void drawSinglePath(List<GraphNode<?>> pathList,Color c) {
@@ -212,7 +204,14 @@ public class Controller implements Initializable {
             galleryAPI.avoidRoom(avoidRoom.getValue());
             avoidView.getItems().add(avoidRoom.getValue());
             avoidRoom.getItems().remove(avoidRoom.getValue());
+    }
 
+    public void resetAvoidedRoom(){
+        galleryAPI.resetAvoidRoom();
+        avoidView.getItems().clear();
+        avoidRoom.getItems().clear();
+        avoidRoom.getItems().addAll(galleryAPI.getNames());
+        avoidRoom.setPromptText("Room");
     }
 
 

@@ -21,10 +21,11 @@ public class GalleryAPI {
     private List<GraphNode<Room>> roomNodes;
     private Image galleryImage;
     private List<GraphNode<Room>> avoidedRooms;
+    private List<String> waypointsList;
 
 
     public GalleryAPI() {
-
+        this.waypointsList = new LinkedList<>();
         this.rooms = new LinkedList<>();
         this.names = new ArrayList<>();
         this.roomNodes = new LinkedList<>();
@@ -34,6 +35,14 @@ public class GalleryAPI {
         readInDatabase();
         connectRooms();
 
+    }
+
+    public List<String> getWaypointsList() {
+        return waypointsList;
+    }
+
+    public void setWaypointsList(List<String> waypointsList) {
+        this.waypointsList = waypointsList;
     }
 
     public List<GraphNode<Room>> getAvoidedRooms() {
@@ -96,7 +105,7 @@ public class GalleryAPI {
             while ((line = br.readLine()) != null) {
                 String[] values = line.split(",");
                 Room r = new Room(values[0], Integer.parseInt(values[1]), Integer.parseInt(values[2]), values[3], values[4]);
-                System.out.println(values[0] + ", " + values[1] + ", " + values[2] + ", " + values[3] + ", " + values[4]);
+                //System.out.println(values[0] + ", " + values[1] + ", " + values[2] + ", " + values[3] + ", " + values[4]);
                 GraphNode<Room> node = new GraphNode<>(r);
                 roomNodes.add(node);
                 roomsHashMap.put(values[0], node);
@@ -109,11 +118,8 @@ public class GalleryAPI {
     }
 
     public void connectNodes(String nodeA, String nodeB) {
-        //roomNodes.get(nodeA).connectToNodeUndirected(roomNodes.get(nodeB), getCost(nodeA, nodeB, roomNodes));
         GraphNode<Room> roomA = roomsHashMap.get(nodeA);
-        //System.out.println(roomA);
         GraphNode<Room> roomB = roomsHashMap.get(nodeB);
-        //System.out.println(roomB);
         roomA.connectToNodeUndirected(roomB, 1);
     }
 
@@ -126,7 +132,7 @@ public class GalleryAPI {
             while ((line = br.readLine()) != null) {
                 String[] values = line.split(",");
                 connectNodes(values[0], values[1]);
-                System.out.println(values[0] + values[1]);
+                //System.out.println(values[0] + values[1]);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -147,37 +153,44 @@ public class GalleryAPI {
     public void avoidRoom(String smellyRoom) {
         System.out.println("Room to avoid: " + smellyRoom);
         for (GraphNode<Room> n : roomNodes) {
-            System.out.println(n.data.getRoomName());
             for (GraphLink l : n.adjList) {
-                System.out.println("\t" + l.destNode.data.toString());
                 GraphNode<Room> r = (GraphNode<Room>) l.destNode;
                 if (n.data.getRoomName().equals(smellyRoom) || r.data.getRoomName().equals(smellyRoom)) {
-                    System.out.println("Blocked");
                     l.cost = 1000; //makes the cost of the room not worth going through
                     avoidedRooms.add(r);
-                    System.out.println(l.cost);
-                    //System.out.println(avoidedRooms.toString());
                 }
             }
         }
     }
 
 
-    public void resetAvoidRoom(String smellyRoom) {
+    public void resetAvoidRoom() {
         try {
             for (GraphNode<Room> n : roomNodes) {
                 for (GraphLink l : n.adjList) {
                     GraphNode<Room> r = (GraphNode<Room>) l.destNode;
-                    if (n.data.getRoomName().equals(smellyRoom) || r.data.getRoomName().equals(smellyRoom)) {
-                        l.cost = 1; //makes the cost of the room not worth going through
-                        avoidedRooms.remove(r);
+                    for (GraphNode<Room> room : avoidedRooms) {
+                        if (n.data.getRoomName().equals(room.data.getRoomName()) || r.data.getRoomName().equals(room.data.getRoomName())) {
+                            l.cost = 1; //makes the cost of the room not worth going through
+                        }
                     }
                 }
             }
+            avoidedRooms.clear();
         } catch (Exception e) {
-            System.out.println("Error: " + e);
+            e.printStackTrace();
         }
     }
 
+    public List<GraphNode<Room>> depthWaypointSupport(String start, String destination){
+        List<GraphNode<Room>> pathList = new LinkedList<>();
+
+        GraphNode<Room> startNode = findGraphNode(start);
+
+        for (String waypoint : waypointsList){
+
+        }
+        return pathList;
+    }
 
 }

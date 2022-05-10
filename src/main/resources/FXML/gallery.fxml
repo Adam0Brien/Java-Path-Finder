@@ -1,18 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.shape.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TreeView?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="573.0" prefWidth="1037.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Controller">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="614.0" prefWidth="925.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Controller">
   <children>
     <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="636.0" prefWidth="1000.0" VBox.vgrow="ALWAYS">
          <children>
             <TabPane layoutX="-2.0" prefHeight="638.0" prefWidth="930.0" tabClosingPolicy="UNAVAILABLE">
               <tabs>
-                  <Tab text="Original Image">
+                  <Tab text="National Gallery">
                      <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="635.0" prefWidth="966.0">
                            <children>
@@ -22,7 +31,7 @@
                                  </font>
                               </Label>
                               <ImageView fx:id="view" fitHeight="466.0" fitWidth="418.0" layoutX="40.0" layoutY="96.0" pickOnBounds="true" preserveRatio="true" style="-fx-border-color: black;" />
-                              <Line endX="-2.0" endY="-58.0" layoutX="494.0" layoutY="59.0" startX="-2.0" startY="563.0" />
+                              <Line endX="-2.0" endY="-58.0" layoutX="494.0" layoutY="59.0" startX="-2.000030517578125" startY="527.0" />
                               <Label fx:id="fileName1" layoutX="76.0" layoutY="87.0" prefHeight="17.0" prefWidth="81.0" />
                               <Label fx:id="fileSize1" layoutX="76.0" layoutY="113.0" prefHeight="17.0" prefWidth="65.0" />
                               <ComboBox fx:id="start" layoutX="521.0" layoutY="54.0" onAction="#updateSelectionsStart" prefWidth="150.0" promptText="Start" />
@@ -31,8 +40,8 @@
                               <ListView fx:id="waypointView" layoutX="650.0" layoutY="183.0" prefHeight="89.0" prefWidth="261.0" />
                               <Label layoutX="521.0" layoutY="28.0" text="Start" />
                               <Label layoutX="729.0" layoutY="28.0" text="Destination" />
-                              <ComboBox fx:id="waypoints" layoutX="522.0" layoutY="209.0" prefHeight="25.0" prefWidth="104.0" promptText="Waypoints" />
-                              <Button layoutX="523.0" layoutY="242.0" mnemonicParsing="false" onAction="#addWaypoint" prefHeight="25.0" prefWidth="103.0" text="Add Waypoint" />
+                              <ComboBox fx:id="waypoints" layoutX="522.0" layoutY="209.0" prefHeight="26.0" prefWidth="118.0" promptText="Waypoints" />
+                              <Button layoutX="523.0" layoutY="242.0" mnemonicParsing="false" onAction="#addWaypoint" prefHeight="26.0" prefWidth="57.0" text="Add" />
                               <Button layoutX="578.0" layoutY="312.0" mnemonicParsing="false" onAction="#findbreadthpath" text="Breadth-First Search" />
                               <Button layoutX="708.0" layoutY="312.0" mnemonicParsing="false" onAction="#findAllDepthpaths" text="All Depth First" />
                               <Button layoutX="708.0" layoutY="312.0" mnemonicParsing="false" onAction="#findDepthpath" text="Depth-First Search" />
@@ -52,13 +61,13 @@
                               <Label layoutX="522.0" layoutY="88.0" text="Avoid" />
                               <Button layoutX="627.0" layoutY="109.0" mnemonicParsing="false" onAction="#avoidThisRoom" text="Avoid" />
                               <Separator layoutX="492.0" layoutY="276.0" prefHeight="4.0" prefWidth="444.0" />
-                              <TreeView layoutX="507.0" layoutY="391.0" prefHeight="146.0" prefWidth="200.0" />
+                              <TreeView fx:id="routeTreeView" layoutX="507.0" layoutY="391.0" prefHeight="146.0" prefWidth="200.0" />
                               <Label layoutX="509.0" layoutY="360.0" text="Tree view" textFill="#9f9f9f">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
                               </Label>
-                              <Separator layoutX="726.0" layoutY="354.0" orientation="VERTICAL" prefHeight="201.0" prefWidth="6.0" />
+                              <Separator layoutX="726.0" layoutY="354.0" orientation="VERTICAL" prefHeight="231.0" prefWidth="1.0" />
                               <Label layoutX="738.0" layoutY="355.0" text="Settings" textFill="#9f9f9f">
                                  <font>
                                     <Font size="18.0" />
@@ -66,15 +75,16 @@
                               </Label>
                               <TextField layoutX="741.0" layoutY="406.0" prefHeight="25.0" prefWidth="57.0" />
                               <Button layoutX="798.0" layoutY="406.0" mnemonicParsing="false" text="Button" />
-                              <Label layoutX="741.0" layoutY="389.0" text="Label" />
+                              <Label layoutX="741.0" layoutY="389.0" text="Route Limit" />
                               <Label layoutX="522.0" layoutY="1.0" text="Room Selection" textFill="#9f9f9f">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
                               </Label>
                               <ListView fx:id="avoidView" layoutX="698.0" layoutY="90.0" prefHeight="75.0" prefWidth="200.0" />
-                              <Button layoutX="532.0" layoutY="137.0" mnemonicParsing="false" text="Clear Avoided Rooms" />
+                              <Button layoutX="532.0" layoutY="137.0" mnemonicParsing="false" onAction="#resetAvoidedRoom" text="Clear Avoided Rooms" />
                               <Button layoutX="709.0" layoutY="279.0" mnemonicParsing="false" onAction="#findAllDepthpaths" prefHeight="26.0" prefWidth="111.0" text="All Depth First" />
+                              <Button layoutX="585.0" layoutY="242.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="57.0" text="Clear" />
                            </children>
                         </AnchorPane>
                      </content>
