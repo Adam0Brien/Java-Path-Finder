@@ -38,6 +38,14 @@ public class GalleryAPI {
 
     }
 
+    public Image getBreadthSearchImage() {
+        return breadthSearchImage;
+    }
+
+    public void setBreadthSearchImage(Image breadthSearchImage) {
+        this.breadthSearchImage = breadthSearchImage;
+    }
+
     public List<String> getWaypointsList() {
         return waypointsList;
     }
@@ -175,9 +183,8 @@ public class GalleryAPI {
         for (String waypoint : waypointsList){
             GraphNode<Room> waypointNode = findGraphNode(waypoint);
             CostOfPath temp = (type.equals(Algo.Depth)) ? Graph.searchGraphDepthFirstCheapestPath(startNode, null, 0, waypointNode.data) :  Graph.findCheapestPathDijkstra(startNode, waypointNode.data);
-            for (GraphNode<?> room : temp.pathList){
-                pathList.add(room);
-            }
+            assert temp != null;
+            pathList.addAll(temp.pathList);
             startNode = waypointNode;
         }
         waypointsList.remove(destination);
