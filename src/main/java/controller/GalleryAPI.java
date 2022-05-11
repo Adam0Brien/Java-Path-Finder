@@ -1,10 +1,7 @@
 package controller;
 
 import javafx.scene.image.Image;
-import model.CostOfPath;
-import model.GraphLink;
-import model.Room;
-import model.GraphNode;
+import model.*;
 import utils.Algo;
 import utils.Graph;
 
@@ -189,6 +186,10 @@ public class GalleryAPI {
         }
         waypointsList.remove(destination);
         return pathList;
+    }
+
+    public List<Pixel> breadthFirstSearch(Pixel startPixel, Pixel destination){
+        return Graph.findBreadthFirstPathInterface(startPixel,destination,breadthSearchImage);
     }
 
 }

@@ -3,16 +3,16 @@ package controller;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeView;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import main.Driver;
 import model.CostOfPath;
+import model.Pixel;
 import utils.Algo;
 import utils.Graph;
 import model.GraphNode;
@@ -29,25 +29,29 @@ public class Controller implements Initializable {
     @FXML
     ImageView finalView;
     @FXML
-    ComboBox<String> start, destination,waypoints;
+    ComboBox<String> start, destination, waypoints;
     @FXML
     AnchorPane anchorpane;
     @FXML
     ListView waypointView;
     @FXML
     ListView avoidView;
-
     @FXML
     TreeView<String> routeTreeView;
-
     @FXML
     AnchorPane mainPane;
     @FXML
     ComboBox<String> avoidRoom;
+    @FXML
+    ToggleButton startCorrdsButton, destinationCorrdsButton, breadthFirstButton;
+    @FXML
+    VBox breadthFirstBox;
+    @FXML
+    Label startCorrdsLabel, destinationCorrdsLabel;
 
     private GalleryAPI galleryAPI;
     private List<String> waypointsList;
-
+    private Pixel startPixel, destinationPixel;
 
 
     /**
@@ -58,13 +62,19 @@ public class Controller implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         galleryAPI = Driver.galleryAPI;
         this.waypointsList = galleryAPI.getWaypointsList();
-        view.setImage(galleryAPI.getGalleryImage());
+        view.setImage(galleryAPI.getBreadthSearchImage());
+
+        System.out.println(galleryAPI.getGalleryImage().getWidth() + "x" + galleryAPI.getGalleryImage().getHeight());
+        System.out.println(view.getFitWidth() + "x" + view.getFitHeight());
+        ToggleGroup toggleGroup = new ToggleGroup();
+        startCorrdsButton.setToggleGroup(toggleGroup);
+        destinationCorrdsButton.setToggleGroup(toggleGroup);
 
         start.getItems().addAll(galleryAPI.getNames());
         destination.getItems().addAll(galleryAPI.getNames());
         avoidRoom.getItems().addAll(galleryAPI.getNames());
         waypoints.getItems().addAll(galleryAPI.getNames());
-
+        breadthFirstBox.setVisible(false);
 
     }
 
@@ -74,12 +84,30 @@ public class Controller implements Initializable {
      */
 
     public void findCoords(ActionEvent event) throws IOException {
+        if (!breadthFirstButton.isSelected()) return;
+    }
 
-        view.setOnMousePressed(e -> {
-            view.getImage().getPixelReader().getColor((int) e.getX(), (int) e.getY());
-            System.out.println("\nX Cord: " + e.getX());
-            System.out.println("\nY Cord: " + e.getY());
-        });
+    public void setDeadthFirstSearchPixels(MouseEvent e) {
+        if (!breadthFirstButton.isSelected()) return;
+        int x = (int) ((e.getX() / view.getFitWidth()) * galleryAPI.getBreadthSearchImage().getWidth());
+        int y = (int) ((e.getY() / view.getFitHeight()) * galleryAPI.getBreadthSearchImage().getHeight());
+        if (!galleryAPI.getBreadthSearchImage().getPixelReader().getColor(x, y).equals(Color.BLACK)) {
+            if (startCorrdsButton.isSelected()) {
+                startPixel = new Pixel(x, y);
+                startCorrdsLabel.setText("X: " + x + " Y: " + y);
+                startCorrdsButton.setSelected(false);
+            }
+            if (destinationCorrdsButton.isSelected()) {
+                destinationPixel = new Pixel(x, y);
+                destinationCorrdsLabel.setText("X: " + x + " Y: " + y);
+                destinationCorrdsButton.setSelected(false);
+            }
+//            System.out.println("True");
+        }
+//        System.out.println(e.getX() +  ", " + e.getY());
+//        System.out.println(x + ", " +  y);
+//        Color c = galleryAPI.getGalleryImage().getPixelReader().getColor(x,y);
+//        System.out.println(c.getRed()*255 + ", " + c.getGreen()*255 + ", " + c.getBlue()*255);
     }
 
 
@@ -89,7 +117,7 @@ public class Controller implements Initializable {
     }
 
 
-    public void findDepthpath (ActionEvent actionEvent){
+    public void findDepthpath(ActionEvent actionEvent) {
         List<GraphNode<?>> newPath;
         if (!waypointsList.isEmpty()) {
             newPath = galleryAPI.waypointSupport(start.getValue(), destination.getValue(), Algo.Depth);
@@ -99,20 +127,20 @@ public class Controller implements Initializable {
             newPath = cp.pathList;
             System.out.println(cp.pathCost);
         }
-        drawSinglePath(newPath,Color.RED);
+        drawSinglePath(newPath, Color.RED);
     }
 
-    public void findAllDepthpaths (ActionEvent actionEvent){
+    public void findAllDepthpaths(ActionEvent actionEvent) {
         List<List<GraphNode<?>>> t;
         if (!waypointsList.isEmpty()) {
             //pathList = galleryAPI.waypointSupport(findRoom((ArrayList<Room>) galleryAPI.getRooms(), start.getValue()), findRoom((ArrayList<Room>) galleryAPI.getRooms(), destination.getValue()), waypointsList.get, galleryAPI.getRoomNodes(), galleryAPI.getRooms());
         } else {
-            t = Graph. findAllPathsDepthFirst(galleryAPI.findGraphNode(start.getValue()), null, galleryAPI.findGraphNode(destination.getValue()).data);
+            t = Graph.findAllPathsDepthFirst(galleryAPI.findGraphNode(start.getValue()), null, galleryAPI.findGraphNode(destination.getValue()).data);
             TreeItem<String> root = new TreeItem<>("Routes");
-            for(List<GraphNode<?>> list : t){
+            for (List<GraphNode<?>> list : t) {
                 //System.out.println("Route");
                 TreeItem<String> item = new TreeItem<>("Route");
-                for (GraphNode<?> node : list){
+                for (GraphNode<?> node : list) {
                     Room room = (Room) node.data;
                     TreeItem<String> subItem = new TreeItem<>(room.getRoomName());
                     item.getChildren().add(subItem);
@@ -125,33 +153,14 @@ public class Controller implements Initializable {
         }
 
 
-
     }
 
 
-
-    public void findbreadthpath (ActionEvent actionEvent) {
-        List<GraphNode<?>> nextPath = new ArrayList<>();
-        if (!waypointsList.isEmpty()) {
-            //pathList = galleryAPI.waypointSupport(findRoom((ArrayList<Room>) galleryAPI.getRooms(), start.getValue()), findRoom((ArrayList<Room>) galleryAPI.getRooms(), destination.getValue()), waypointsList.get, galleryAPI.getRoomNodes(), galleryAPI.getRooms());
-        } else {
-            //CostOfPath cp = Graph.findPathBreadthFirst(galleryAPI.findGraphNode(start.getValue()),  galleryAPI.findGraphNode(destination.getValue()).data);
-              nextPath  = Graph.findPathBreadthFirstInterface(galleryAPI.findGraphNode(start.getValue()),galleryAPI.findGraphNode(destination.getValue()).data);
-
-          //  nextPath = cp.pathList;
-          //  System.out.println(cp.pathCost);
+    public void findbreadthpath(ActionEvent actionEvent) {
+        List<Pixel> pixels = galleryAPI.breadthFirstSearch(startPixel,destinationPixel);
+        for (Pixel p: pixels){
+            System.out.println(p);
         }
-
-        //
-        // Option of doing a hash set however the hash set doesn't keep the path in order
-        //
-        //HashSet<GraphNodeDw<?>> hs = new HashSet<>(pathList);
-        drawSinglePath(nextPath,Color.PURPLE);
-        for (GraphNode<?> n : nextPath) {
-            GraphNode<Room> l = (GraphNode<Room>) n;
-
-        }
-
     }
 
 
@@ -168,17 +177,17 @@ public class Controller implements Initializable {
         }
 
 
-        drawSinglePath(pathList,Color.BLUE);
+        drawSinglePath(pathList, Color.BLUE);
     }
 
-    public void drawSinglePath(List<GraphNode<?>> pathList,Color c) {
+    public void drawSinglePath(List<GraphNode<?>> pathList, Color c) {
         mainPane.getChildren().clear();
         for (int i = 0; i < pathList.size(); i++) {
             GraphNode<Room> node = (GraphNode<Room>) pathList.get(i);
 
             if (i + 1 < pathList.size()) {
                 GraphNode<Room> nextNode = (GraphNode<Room>) pathList.get(i + 1);
-                Line l = new Line(node.data.getXCoord(), node.data.getYCoord() + 50, nextNode.data.getXCoord(), nextNode.data.getYCoord() + 50);
+                Line l = new Line(node.data.getXCoord(), node.data.getYCoord(), nextNode.data.getXCoord(), nextNode.data.getYCoord());
                 l.setFill(c);
                 l.setStroke(c);
                 l.setStrokeWidth(5);
@@ -191,12 +200,12 @@ public class Controller implements Initializable {
 
     public void avoidThisRoom() {
         if (galleryAPI.getAvoidedRooms().contains(galleryAPI.findGraphNode(avoidRoom.getValue()))) return;
-            galleryAPI.avoidRoom(avoidRoom.getValue());
-            avoidView.getItems().add(avoidRoom.getValue());
-            avoidRoom.getItems().remove(avoidRoom.getValue());
+        galleryAPI.avoidRoom(avoidRoom.getValue());
+        avoidView.getItems().add(avoidRoom.getValue());
+        avoidRoom.getItems().remove(avoidRoom.getValue());
     }
 
-    public void resetAvoidedRoom(){
+    public void resetAvoidedRoom() {
         galleryAPI.resetAvoidRoom();
         avoidView.getItems().clear();
         avoidRoom.getItems().clear();
@@ -204,29 +213,35 @@ public class Controller implements Initializable {
         avoidRoom.setPromptText("Room");
     }
 
-    public void resetWaypoints(){
+    public void resetWaypoints() {
         waypointView.getItems().clear();
         galleryAPI.getWaypointsList().clear();
     }
 
-    public void clearMap(){
+    public void clearMap() {
         mainPane.getChildren().clear();
     }
 
+    public void showBreadthSearchBox() {
+        if (breadthFirstButton.isSelected()) {
+            breadthFirstBox.setVisible(true);
+        } else {
+            breadthFirstBox.setVisible(false);
+        }
+    }
 
-    public void updateSelectionsStart(){
+    public void updateSelectionsStart() {
 
     }
 
-    public void updateSelectionsAvoid(){
+    public void updateSelectionsAvoid() {
 
     }
 
 
-    public void updateSelectionsDestination(){
+    public void updateSelectionsDestination() {
 
     }
-
 
 
 //
