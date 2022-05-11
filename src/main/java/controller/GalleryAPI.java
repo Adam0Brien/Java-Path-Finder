@@ -1,7 +1,5 @@
 package controller;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.scene.image.Image;
 import model.CostOfPath;
 import model.GraphLink;
@@ -11,7 +9,6 @@ import utils.Algo;
 import utils.Graph;
 
 import java.io.*;
-import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 
@@ -22,6 +19,7 @@ public class GalleryAPI {
     private List<String> names;
     private List<GraphNode<Room>> roomNodes;
     private Image galleryImage;
+    private Image breadthSearchImage;
     private List<GraphNode<Room>> avoidedRooms;
     private List<String> waypointsList;
 
@@ -34,6 +32,7 @@ public class GalleryAPI {
         this.roomsHashMap = new HashMap<>();
         this.avoidedRooms = new LinkedList<>();
         this.galleryImage = new Image(getClass().getResourceAsStream("/images/floorplan-level-2-july-2020.jpg"));
+        this.breadthSearchImage = new Image(getClass().getResourceAsStream("/images/floorplan-level-2-july-2020-breadth-search.jpg"));
         readInDatabase();
         connectRooms();
 
@@ -87,11 +86,6 @@ public class GalleryAPI {
         return galleryImage;
     }
 
-    public void findShortestRoute() {
-        //using the CostOfPath class here... somewhere anyways
-    }
-
-
     //We could generate ALL routes and use something like noise reduction to take away all the super long ones
     public List<List<GraphNode<?>>> generateMultipleRoutes(String start, String destination) {
         GraphNode<Room> startNode = roomsHashMap.get(start);
@@ -139,21 +133,10 @@ public class GalleryAPI {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-
-//        System.out.println("Rooms Connected");
-//        System.out.println("-----------------------");
-//        for (GraphNode<Room> room : roomNodes){
-//            System.out.println(room.data.getRoomName());
-//            for (GraphLink adj : room.adjList){
-//                System.out.println(adj.destNode.data);
-//            }
-//        }
     }
 
 
     public void avoidRoom(String smellyRoom) {
-        System.out.println("Room to avoid: " + smellyRoom);
         for (GraphNode<Room> n : roomNodes) {
             for (GraphLink l : n.adjList) {
                 GraphNode<Room> r = (GraphNode<Room>) l.destNode;
