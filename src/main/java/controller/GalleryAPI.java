@@ -1,9 +1,11 @@
 package controller;
 
 import javafx.scene.image.Image;
+import javafx.scene.paint.Color;
 import model.*;
 import utils.Algo;
 import utils.Graph;
+import utils.Utilities;
 
 import java.io.*;
 import java.util.*;
@@ -15,6 +17,7 @@ public class GalleryAPI {
     private HashMap<String, GraphNode<Room>> roomsHashMap;
     private List<String> names;
     private List<GraphNode<Room>> roomNodes;
+    private List<GraphNode<Pixel>> pixelNodes;
     private Image galleryImage;
     private Image breadthSearchImage;
     private List<GraphNode<Room>> avoidedRooms;
@@ -26,13 +29,14 @@ public class GalleryAPI {
         this.rooms = new LinkedList<>();
         this.names = new ArrayList<>();
         this.roomNodes = new LinkedList<>();
+        this.pixelNodes = new LinkedList<>();
         this.roomsHashMap = new HashMap<>();
         this.avoidedRooms = new LinkedList<>();
         this.galleryImage = new Image(getClass().getResourceAsStream("/images/floorplan-level-2-july-2020.jpg"));
         this.breadthSearchImage = new Image(getClass().getResourceAsStream("/images/floorplan-level-2-july-2020-breadth-search.jpg"));
         readInDatabase();
         connectRooms();
-
+        buildPixelGraph();
     }
 
     public Image getBreadthSearchImage() {
@@ -172,14 +176,14 @@ public class GalleryAPI {
         }
     }
 
-    public List<GraphNode<?>> waypointSupport(String start, String destination, Algo type){
+    public List<GraphNode<?>> waypointSupport(String start, String destination, Algo type) {
         List<GraphNode<?>> pathList = new LinkedList<>();
         waypointsList.add(destination);
         GraphNode<Room> startNode = findGraphNode(start);
 
-        for (String waypoint : waypointsList){
+        for (String waypoint : waypointsList) {
             GraphNode<Room> waypointNode = findGraphNode(waypoint);
-            CostOfPath temp = (type.equals(Algo.Depth)) ? Graph.searchGraphDepthFirstCheapestPath(startNode, null, 0, waypointNode.data) :  Graph.findCheapestPathDijkstra(startNode, waypointNode.data);
+            CostOfPath temp = (type.equals(Algo.Depth)) ? Graph.searchGraphDepthFirstCheapestPath(startNode, null, 0, waypointNode.data) : Graph.findCheapestPathDijkstra(startNode, waypointNode.data);
             assert temp != null;
             pathList.addAll(temp.pathList);
             startNode = waypointNode;
@@ -188,8 +192,54 @@ public class GalleryAPI {
         return pathList;
     }
 
-    public List<Pixel> breadthFirstSearch(Pixel startPixel, Pixel destination){
-        return Graph.findBreadthFirstPathInterface(startPixel,destination,breadthSearchImage);
+    public List<Pixel> breadthFirstSearch(Pixel startPixel, Pixel destination) {
+        return Graph.findBreadthFirstPathInterface(startPixel, destination, breadthSearchImage);
+    }
+
+    public void buildPixelGraph() {
+        int cost = 1;
+        for (int x = 0; x < breadthSearchImage.getWidth(); x++) {
+            for (int y = 0; y < breadthSearchImage.getHeight(); y++) {
+                if (breadthSearchImage.getPixelReader().getColor(x, y).equals(Color.BLACK)) continue;
+
+                GraphNode<Pixel> current = new GraphNode<>(new Pixel(x, y));
+                pixelNodes.add(current);
+                //Below current pixel
+                int belowX = x;
+                int belowY = y + 1;
+                if (belowY < breadthSearchImage.getHeight()) {
+                    if (!breadthSearchImage.getPixelReader().getColor(belowX, belowY).equals(Color.BLACK)) {
+                        GraphNode<Pixel> pixel = new GraphNode<>(new Pixel(belowX, belowY));
+                        current.connectToNodeUndirected(pixel, cost);
+                    }
+                }
+                //Right of current pixel
+                int rightX = x + 1;
+                int rightY = y;
+                if (rightX < breadthSearchImage.getWidth()) {
+                    if (!breadthSearchImage.getPixelReader().getColor(rightX, rightY).equals(Color.BLACK)) {
+                        GraphNode<Pixel> pixel = new GraphNode<>(new Pixel(rightX, rightY));
+                        current.connectToNodeUndirected(pixel, cost);
+                    }
+                }
+                //diagonal down right to pixel
+                int diagX = x + 1;
+                int diagY = y + 1;
+                if (diagX < breadthSearchImage.getWidth() && diagY < breadthSearchImage.getHeight()) {
+                    if (!breadthSearchImage.getPixelReader().getColor(diagX, diagY).equals(Color.BLACK)) {
+                        GraphNode<Pixel> pixel = new GraphNode<>(new Pixel(diagX, diagY));
+                        current.connectToNodeUndirected(pixel, cost);
+                    }
+                }
+            }
+        }
+    }
+
+    public GraphNode<Pixel> findPixel(Pixel lookingFor) {
+        for (GraphNode<Pixel> current : pixelNodes) {
+            if (current.data.equals(lookingFor)) return current;
+        }
+        return null;
     }
 
 }
