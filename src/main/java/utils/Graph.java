@@ -79,7 +79,43 @@ public class Graph {
         return findPathBreadthFirst(agenda, encountered, lookingfor); //Tail call
     }
 
-    //public static <T> List<GraphNode<?>>
+    public static <T> List<GraphNode<?>> findBreadPath(GraphNode<?> startNode, T lookingfor) {
+        List<GraphNode<?>> encountered = new ArrayList<>();
+        List<List<GraphNode<?>>> agenda = new ArrayList<>(); //Agenda comprised of path lists here!
+        List<GraphNode<?>> firstAgendaPath = new ArrayList<>();
+        List<GraphNode<?>> resultPath = new ArrayList<>();
+        firstAgendaPath.add(startNode);
+        agenda.add(firstAgendaPath);
+        while (!agenda.isEmpty()) {
+            List<GraphNode<?>> nextPath = agenda.remove(0); //Get first item (next path to consider) off agenda
+            GraphNode<?> currentNode = nextPath.get(0); //The first item in the next path is the current node
+            if (currentNode.data.equals(lookingfor)) {
+                resultPath = nextPath;
+                break;
+            } //If that's the goal, we've found our path (so return it)
+
+            if (encountered == null)
+                encountered = new ArrayList<>(); //First node considered in search so create new (empty)
+            //encountered list
+            if (!encountered.contains(currentNode)) {
+                encountered.add(currentNode);//Record current node as encountered so it isn't revisited again
+//            System.out.println("=============");
+//            System.out.println(currentNode.data);
+                for (GraphLink adjNode : currentNode.adjList) { //For each adjacent node
+                    //System.out.println("\t" + adjNode.destNode.data);
+                    if (!encountered.contains(adjNode)) { //If it hasn't already been encountered
+//                    System.out.println("\t" + "\t" + adjNode.destNode.data);
+                        List<GraphNode<?>> newPath = new ArrayList<>(nextPath); //Create a new path list as a copy of
+                        //the current/next path
+                        newPath.add(0, adjNode.destNode); //And add the adjacent node to the front of the new copy
+                        agenda.add(newPath); //Add the new path to the end of agenda (end->BFS!)
+                    }
+                }
+            }
+        }
+        Collections.reverse(resultPath); //Reverse path (currently has the goal node as the first item)
+        return resultPath;
+    }
 
     //Recursive depth-first search of graph (all paths identified returned)
     public static <T> List<List<GraphNode<?>>> findAllPathsDepthFirst(GraphNode<?> from, List<GraphNode<?>> encountered, T lookingfor) {

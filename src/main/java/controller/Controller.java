@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
+import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
@@ -62,7 +63,7 @@ public class Controller implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         galleryAPI = Driver.galleryAPI;
         this.waypointsList = galleryAPI.getWaypointsList();
-        view.setImage(galleryAPI.getBreadthSearchImage());
+        view.setImage(galleryAPI.getGalleryImage());
 
         System.out.println(galleryAPI.getGalleryImage().getWidth() + "x" + galleryAPI.getGalleryImage().getHeight());
         System.out.println(view.getFitWidth() + "x" + view.getFitHeight());
@@ -157,10 +158,8 @@ public class Controller implements Initializable {
 
 
     public void findbreadthpath(ActionEvent actionEvent) {
-//        System.out.println(startPixel);
-//        System.out.println(destinationPixel);
         List<GraphNode<Pixel>> pixels = (List<GraphNode<Pixel>>) galleryAPI.breadthFirstSearch(startPixel,destinationPixel);
-        //List<GraphNode<?>> pixels = Graph.findPathBreadthFirstInterface(galleryAPI.findGraphNode(start.getValue()), galleryAPI.findGraphNode(destination.getValue()).data);
+        //WritableImage writableImage = new WritableImage(galleryAPI.getGalleryImage(),);
         for (GraphNode<Pixel> p : pixels){
             System.out.println(p.data);
         }

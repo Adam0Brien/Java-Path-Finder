@@ -205,7 +205,7 @@ public class GalleryAPI {
     }
 
     public List<?> breadthFirstSearch(Pixel startPixel, Pixel destination) {
-        return Graph.findPathBreadthFirstInterface(findPixel(startPixel), findPixel(destination).data);
+        return Graph.findBreadPath(findPixel(startPixel), findPixel(destination).data);
     }
 
     public void buildPixelGraph() {
