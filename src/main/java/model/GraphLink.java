@@ -6,7 +6,7 @@ package model;
 
 public class GraphLink {
 
-        public GraphNode<?> destNode; //Could also store source node if required
+        public GraphNode<?> destNode;//Could also store source node if required
 
         public int cost; //Other link attributes could be similarly stored
 

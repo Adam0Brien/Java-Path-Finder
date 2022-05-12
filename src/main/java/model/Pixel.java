@@ -40,4 +40,12 @@ public class Pixel {
     public int hashCode() {
         return Objects.hash(xCorrd, yCoord);
     }
+
+    @Override
+    public String toString() {
+        return "Pixel{" +
+                "xCorrd=" + xCorrd +
+                ", yCoord=" + yCoord +
+                '}';
+    }
 }

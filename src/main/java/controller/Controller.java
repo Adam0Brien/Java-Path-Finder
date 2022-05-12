@@ -157,9 +157,12 @@ public class Controller implements Initializable {
 
 
     public void findbreadthpath(ActionEvent actionEvent) {
-        List<Pixel> pixels = galleryAPI.breadthFirstSearch(startPixel,destinationPixel);
-        for (Pixel p: pixels){
-            System.out.println(p);
+//        System.out.println(startPixel);
+//        System.out.println(destinationPixel);
+        List<GraphNode<Pixel>> pixels = (List<GraphNode<Pixel>>) galleryAPI.breadthFirstSearch(startPixel,destinationPixel);
+        //List<GraphNode<?>> pixels = Graph.findPathBreadthFirstInterface(galleryAPI.findGraphNode(start.getValue()), galleryAPI.findGraphNode(destination.getValue()).data);
+        for (GraphNode<Pixel> p : pixels){
+            System.out.println(p.data);
         }
     }
 

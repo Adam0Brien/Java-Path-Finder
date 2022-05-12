@@ -61,16 +61,25 @@ public class Graph {
         if (encountered == null)
             encountered = new ArrayList<>(); //First node considered in search so create new (empty)
         //encountered list
-        encountered.add(currentNode); //Record current node as encountered so it isn't revisited again
-        for (GraphLink adjNode : currentNode.adjList) //For each adjacent node
-            if (!encountered.contains(adjNode)) { //If it hasn't already been encountered
-                List<GraphNode<?>> newPath = new ArrayList<>(nextPath); //Create a new path list as a copy of
-                //the current/next path
-                newPath.add(0, adjNode.destNode); //And add the adjacent node to the front of the new copy
-                agenda.add(newPath); //Add the new path to the end of agenda (end->BFS!)
+        if (!encountered.contains(currentNode)) {
+            encountered.add(currentNode);//Record current node as encountered so it isn't revisited again
+//            System.out.println("=============");
+//            System.out.println(currentNode.data);
+            for (GraphLink adjNode : currentNode.adjList) { //For each adjacent node
+                //System.out.println("\t" + adjNode.destNode.data);
+                if (!encountered.contains(adjNode)) { //If it hasn't already been encountered
+//                    System.out.println("\t" + "\t" + adjNode.destNode.data);
+                    List<GraphNode<?>> newPath = new ArrayList<>(nextPath); //Create a new path list as a copy of
+                    //the current/next path
+                    newPath.add(0, adjNode.destNode); //And add the adjacent node to the front of the new copy
+                    agenda.add(newPath); //Add the new path to the end of agenda (end->BFS!)
+                }
             }
+        }
         return findPathBreadthFirst(agenda, encountered, lookingfor); //Tail call
     }
+
+    //public static <T> List<GraphNode<?>>
 
     //Recursive depth-first search of graph (all paths identified returned)
     public static <T> List<List<GraphNode<?>>> findAllPathsDepthFirst(GraphNode<?> from, List<GraphNode<?>> encountered, T lookingfor) {
