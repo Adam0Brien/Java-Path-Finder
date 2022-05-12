@@ -176,9 +176,11 @@ public class Controller implements Initializable {
         List<GraphNode<?>> pathList = new ArrayList<>();
         if (!waypointsList.isEmpty()) {
             pathList = galleryAPI.waypointSupport(start.getValue(), destination.getValue(), Algo.Dijkstra);
-        } else if (!interestsList.isEmpty()) {
-            pathList = galleryAPI.interestsSupport(start.getValue(),destination.getValue(),Algo.Dijkstra);
-        }else{
+        }
+//        else if (!interestsList.isEmpty()) {
+//            pathList = galleryAPI.interestsSupport(start.getValue(),destination.getValue(),Algo.Dijkstra);
+//        }
+        else{
             CostOfPath cp = Graph.findCheapestPathDijkstra(galleryAPI.findGraphNode(start.getValue()), galleryAPI.findGraphNode(destination.getValue()).data);
 
             pathList = cp.pathList;
