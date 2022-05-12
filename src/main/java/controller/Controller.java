@@ -4,6 +4,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseEvent;
@@ -66,6 +67,7 @@ public class Controller implements Initializable {
         view.setImage(galleryAPI.getGalleryImage());
 
         System.out.println(galleryAPI.getGalleryImage().getWidth() + "x" + galleryAPI.getGalleryImage().getHeight());
+        System.out.println(galleryAPI.getBreadthSearchImage().getWidth() + "x" + galleryAPI.getGalleryImage().getHeight());
         System.out.println(view.getFitWidth() + "x" + view.getFitHeight());
         ToggleGroup toggleGroup = new ToggleGroup();
         startCorrdsButton.setToggleGroup(toggleGroup);
@@ -81,18 +83,13 @@ public class Controller implements Initializable {
     }
 
 
-    /**
-     * Key Methods
-     */
-
-    public void findCoords(ActionEvent event) throws IOException {
-        if (!breadthFirstButton.isSelected()) return;
-    }
 
     public void setDeadthFirstSearchPixels(MouseEvent e) {
         if (!breadthFirstButton.isSelected()) return;
         int x = (int) ((e.getX() / view.getFitWidth()) * galleryAPI.getBreadthSearchImage().getWidth());
         int y = (int) ((e.getY() / view.getFitHeight()) * galleryAPI.getBreadthSearchImage().getHeight());
+        System.out.println("E: " + e.getX() + ", " + e.getY());
+        System.out.println("Calculated: " + x + ", " + y);
         if (!galleryAPI.getBreadthSearchImage().getPixelReader().getColor(x, y).equals(Color.BLACK)) {
             if (startCorrdsButton.isSelected()) {
                 startPixel = new Pixel(x, y);
@@ -160,10 +157,12 @@ public class Controller implements Initializable {
 
     public void findbreadthpath(ActionEvent actionEvent) {
         List<GraphNode<Pixel>> pixels = (List<GraphNode<Pixel>>) galleryAPI.breadthFirstSearch(startPixel,destinationPixel);
-        //WritableImage writableImage = new WritableImage(galleryAPI.getGalleryImage(),);
+        Image image = galleryAPI.getGalleryImage();
+        WritableImage writableImage = new WritableImage(image.getPixelReader(), (int)image.getWidth(), (int)image.getHeight());
         for (GraphNode<Pixel> p : pixels){
-            System.out.println(p.data);
+            writableImage.getPixelWriter().setColor(p.data.getXCorrd(), p.data.getYCoord()+20, Color.ORANGE);
         }
+        view.setImage(writableImage);
     }
 
 
@@ -232,44 +231,5 @@ public class Controller implements Initializable {
             breadthFirstBox.setVisible(false);
         }
     }
-
-    public void updateSelectionsStart() {
-
-    }
-
-    public void updateSelectionsAvoid() {
-
-    }
-
-
-    public void updateSelectionsDestination() {
-
-    }
-
-
-//
-//    /**
-//     * Draws a line between two nodes
-//     * @param nodeA starting node
-//     * @param nodeB destination node
-//     */
-//    public void drawLine(int nodeA, int nodeB) {
-//        int nodeAX = roomNodes.get(nodeA).data.getXCoord();
-//        int nodeAY = roomNodes.get(nodeA).data.getYCoord();
-//        int nodeBX = roomNodes.get(nodeB).data.getXCoord();
-//        int nodeBY = roomNodes.get(nodeB).data.getYCoord();
-//
-//        Line line = new Line(nodeAX, nodeAY, nodeBX, nodeBY);
-//        line.setStartX(nodeAX);
-//        line.setStartY(nodeAY);
-//        line.setEndX(nodeBX);
-//        line.setEndY(nodeBY);
-//        line.setFill(Color.LIMEGREEN);
-//        line.setStrokeWidth(2);
-//        line.setLayoutX(view.getLayoutX());
-//        line.setLayoutY(view.getLayoutY());
-//        ((AnchorPane) view.getParent()).getChildren().add(line);
-//    }
-
 }
 

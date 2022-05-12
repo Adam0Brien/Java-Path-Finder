@@ -255,14 +255,14 @@ public class GalleryAPI {
                     }
                 }
                 //diagonal down right to pixel
-//                int diagX = x + 1;
-//                int diagY = y + 1;
-//                if (diagX < breadthSearchImage.getWidth() && diagY < breadthSearchImage.getHeight()) {
-//                    if (!breadthSearchImage.getPixelReader().getColor(diagX, diagY).equals(Color.BLACK)) {
-//                        GraphNode<Pixel> pixel = findPixel(new Pixel(diagX, diagY));
-//                        current.connectToNodeUndirected(pixel, cost);
-//                    }
-//                }
+                int diagX = x + 1;
+                int diagY = y + 1;
+                if (diagX < breadthSearchImage.getWidth() && diagY < breadthSearchImage.getHeight()) {
+                    if (!breadthSearchImage.getPixelReader().getColor(diagX, diagY).equals(Color.BLACK)) {
+                        GraphNode<Pixel> pixel = findPixel(new Pixel(diagX, diagY));
+                        current.connectToNodeUndirected(pixel, cost);
+                    }
+                }
             }
         }
     }
