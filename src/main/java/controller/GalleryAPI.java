@@ -24,12 +24,15 @@ public class GalleryAPI {
     private List<GraphNode<Room>> avoidedRooms;
     private List<String> waypointsList;
 
+    private List<String> pointsOfInterest;
+
 
     public GalleryAPI() {
         this.waypointsList = new LinkedList<>();
         this.hashMap = new HashMap<>();
         this.rooms = new LinkedList<>();
         this.names = new ArrayList<>();
+        this.pointsOfInterest = new ArrayList<>();
         this.roomNodes = new LinkedList<>();
         this.pixelNodes = new LinkedList<>();
         this.roomsHashMap = new HashMap<>();
@@ -41,6 +44,14 @@ public class GalleryAPI {
         System.out.println("Building Graph");
         buildPixelGraph();
         System.out.println("Building done");
+    }
+
+    public List<String> getPointsOfInterest() {
+        return pointsOfInterest;
+    }
+
+    public void setPointsOfInterest(List<String> pointsOfInterest) {
+        this.pointsOfInterest = pointsOfInterest;
     }
 
     public List<GraphNode<Pixel>> getPixelNodes() {
@@ -127,7 +138,9 @@ public class GalleryAPI {
                 roomNodes.add(node);
                 roomsHashMap.put(values[0], node);
                 names.add(values[0]);
+                if (!pointsOfInterest.contains(values[3])) pointsOfInterest.add(values[3]);
                 rooms.add(r);
+
             }
         } catch (IOException e) {
             e.printStackTrace();

@@ -30,7 +30,7 @@ public class Controller implements Initializable {
     @FXML
     ImageView finalView;
     @FXML
-    ComboBox<String> start, destination, waypoints;
+    ComboBox<String> start, destination, waypoints,pointsOfInterest;
     @FXML
     AnchorPane anchorpane;
     @FXML
@@ -75,6 +75,7 @@ public class Controller implements Initializable {
         destination.getItems().addAll(galleryAPI.getNames());
         avoidRoom.getItems().addAll(galleryAPI.getNames());
         waypoints.getItems().addAll(galleryAPI.getNames());
+        pointsOfInterest.getItems().addAll(galleryAPI.getPointsOfInterest());
         breadthFirstBox.setVisible(false);
 
     }
