@@ -35,7 +35,7 @@ public class Controller implements Initializable {
     @FXML
     AnchorPane anchorpane;
     @FXML
-    ListView waypointView;
+    ListView waypointView , interestsView;
     @FXML
     ListView avoidView;
     @FXML
@@ -52,7 +52,7 @@ public class Controller implements Initializable {
     Label startCorrdsLabel, destinationCorrdsLabel;
 
     private GalleryAPI galleryAPI;
-    private List<String> waypointsList;
+    private List<String> waypointsList , interestsList;
     private Pixel startPixel, destinationPixel;
 
 
@@ -64,6 +64,7 @@ public class Controller implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         galleryAPI = Driver.galleryAPI;
         this.waypointsList = galleryAPI.getWaypointsList();
+        this.interestsList = galleryAPI.getPointsOfInterest();
         view.setImage(galleryAPI.getGalleryImage());
 
         System.out.println(galleryAPI.getGalleryImage().getWidth() + "x" + galleryAPI.getGalleryImage().getHeight());
@@ -115,6 +116,10 @@ public class Controller implements Initializable {
         waypointsList.add(waypoints.getValue());
     }
 
+    public void addInterest(){
+        interestsView.getItems().addAll(pointsOfInterest.getValue());
+        interestsList.add(pointsOfInterest.getValue());
+    }
 
     public void findDepthpath(ActionEvent actionEvent) {
         List<GraphNode<?>> newPath;
@@ -171,7 +176,9 @@ public class Controller implements Initializable {
         List<GraphNode<?>> pathList = new ArrayList<>();
         if (!waypointsList.isEmpty()) {
             pathList = galleryAPI.waypointSupport(start.getValue(), destination.getValue(), Algo.Dijkstra);
-        } else {
+        } else if (!interestsList.isEmpty()) {
+            pathList = galleryAPI.interestsSupport(start.getValue(),destination.getValue(),Algo.Dijkstra);
+        }else{
             CostOfPath cp = Graph.findCheapestPathDijkstra(galleryAPI.findGraphNode(start.getValue()), galleryAPI.findGraphNode(destination.getValue()).data);
 
             pathList = cp.pathList;

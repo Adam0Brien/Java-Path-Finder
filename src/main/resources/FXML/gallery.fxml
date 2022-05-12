@@ -120,7 +120,7 @@
                               </VBox>
                               <ComboBox fx:id="pointsOfInterest" layoutX="708.0" layoutY="316.0" prefWidth="150.0" promptText="Most Interesting" />
                               <Separator layoutX="659.0" layoutY="169.0" orientation="VERTICAL" prefHeight="108.0" prefWidth="5.0" />
-                              <Button layoutX="708.0" layoutY="360.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="58.0" text="Add" />
+                              <Button layoutX="708.0" layoutY="360.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="58.0" onAction="#addInterest" text="Add" />
                               <Button layoutX="798.0" layoutY="360.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="59.0" text="Clear" />
                               <Label layoutX="698.0" layoutY="280.0" prefHeight="27.0" prefWidth="145.0" text="Points of Interest" textFill="#9f9f9f">
                                  <font>
@@ -128,7 +128,7 @@
                                  </font>
                               </Label>
                               <ListView fx:id="waypointView" layoutX="669.0" layoutY="179.0" prefHeight="89.0" prefWidth="420.0" />
-                              <ListView layoutX="867.0" layoutY="290.0" prefHeight="116.0" prefWidth="230.0" />
+                              <ListView fx:id="interestsView" layoutX="867.0" layoutY="290.0" prefHeight="116.0" prefWidth="230.0" />
                               <Separator layoutX="907.0" layoutY="416.0" orientation="VERTICAL" prefHeight="346.0" prefWidth="0.0" />
                            </children>
                         </AnchorPane>

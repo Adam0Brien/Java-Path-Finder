@@ -217,6 +217,22 @@ public class GalleryAPI {
         return pathList;
     }
 
+    public List<GraphNode<?>> interestsSupport(String start, String destination, Algo type) {
+        List<GraphNode<?>> pathList = new LinkedList<>();
+        pointsOfInterest.add(destination);
+        GraphNode<Room> startNode = findGraphNode(start);
+
+        for (String interest : pointsOfInterest) {
+            GraphNode<Room> interestNode = findGraphNode(interest);
+            CostOfPath temp = (type.equals(Algo.Depth)) ? Graph.searchGraphDepthFirstCheapestPath(startNode, null, 0, interestNode.data) : Graph.findCheapestPathDijkstra(startNode, interestNode.data);
+            assert temp != null;
+            pathList.addAll(temp.pathList);
+            startNode = interestNode;
+        }
+        waypointsList.remove(destination);
+        return pathList;
+    }
+
     public List<?> breadthFirstSearch(Pixel startPixel, Pixel destination) {
         return Graph.findBreadPath(findPixel(startPixel), findPixel(destination).data);
     }
