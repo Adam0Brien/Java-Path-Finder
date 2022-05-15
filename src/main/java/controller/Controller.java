@@ -51,11 +51,14 @@ public class Controller implements Initializable {
     VBox breadthFirstBox;
     @FXML
     Label startCorrdsLabel, destinationCorrdsLabel;
+    @FXML
+    ColorPicker dijkstrasColorPicker, depthColorPicker, breadthColorPicker;
 
     private GalleryAPI galleryAPI;
     private List<String> waypointsList , interestsList;
     private Pixel startPixel, destinationPixel;
     private Circle startCircle, endCircle;
+    private Color dijkstraColor, depthColor, breathColor;
 
     /**
      * On startup loads the map of the art gallery and makes all the connections for each room
@@ -67,8 +70,15 @@ public class Controller implements Initializable {
         this.waypointsList = galleryAPI.getWaypointsList();
         this.interestsList = galleryAPI.getPointsOfInterest();
         view.setImage(galleryAPI.getGalleryImage());
-
+        //view.setImage(galleryAPI.getBreadthSearchImage());
         mainPane.setPrefHeight(view.getFitHeight());
+
+        dijkstraColor = Color.BLUE;
+        dijkstrasColorPicker.setValue(Color.BLUE);
+        depthColor = Color.RED;
+        depthColorPicker.setValue(Color.RED);
+        breathColor = Color.ORANGE;
+        breadthColorPicker.setValue(Color.ORANGE);
 
         startCircle = new Circle();
         startCircle.setRadius(3);
@@ -97,7 +107,10 @@ public class Controller implements Initializable {
 
         int x = (int) ((e.getX() / view.getFitWidth()) * galleryAPI.getBreadthSearchImage().getWidth());
         int y = (int) ((e.getY() / view.getFitHeight()) * galleryAPI.getBreadthSearchImage().getHeight());
-
+        System.out.println("======");
+        System.out.println(e.getX() + ", " + e.getY());
+        System.out.println("-------");
+        System.out.println(x+", " +y);
 
         if (!galleryAPI.getBreadthSearchImage().getPixelReader().getColor(x, y).equals(Color.BLACK)) {
             if (startCorrdsButton.isSelected()) {
@@ -123,6 +136,7 @@ public class Controller implements Initializable {
 
 
     public void addWaypoint() {
+        if (galleryAPI.getWaypointsList().contains(waypoints.getValue())) return;
         waypointView.getItems().addAll(waypoints.getValue());
         waypointsList.add(waypoints.getValue());
     }
@@ -141,7 +155,7 @@ public class Controller implements Initializable {
 
             newPath = cp.pathList;
         }
-        drawSinglePath(newPath, Color.RED);
+        drawSinglePath(newPath, depthColor);
     }
 
     public void findAllDepthpaths(ActionEvent actionEvent) {
@@ -174,7 +188,7 @@ public class Controller implements Initializable {
         Image image = galleryAPI.getGalleryImage();
         WritableImage writableImage = new WritableImage(image.getPixelReader(), (int)image.getWidth(), (int)image.getHeight());
         for (GraphNode<Pixel> p : pixels){
-            writableImage.getPixelWriter().setColor(p.data.getXCorrd(), p.data.getYCoord(), Color.ORANGE);
+            writableImage.getPixelWriter().setColor(p.data.getXCorrd(), p.data.getYCoord(), breathColor);
         }
         view.setImage(writableImage);
     }
@@ -196,7 +210,7 @@ public class Controller implements Initializable {
         }
 
 
-        drawSinglePath(pathList, Color.BLUE);
+        drawSinglePath(pathList, dijkstraColor);
     }
 
     public void drawSinglePath(List<GraphNode<?>> pathList, Color c) {
@@ -219,9 +233,9 @@ public class Controller implements Initializable {
 
     public void avoidThisRoom() {
         if (galleryAPI.getAvoidedRooms().contains(galleryAPI.findGraphNode(avoidRoom.getValue()))) return;
+        if (avoidRoom.getValue() == null) return;
         galleryAPI.avoidRoom(avoidRoom.getValue());
         avoidView.getItems().add(avoidRoom.getValue());
-        avoidRoom.getItems().remove(avoidRoom.getValue());
     }
 
     public void resetAvoidedRoom() {
@@ -229,7 +243,7 @@ public class Controller implements Initializable {
         avoidView.getItems().clear();
         avoidRoom.getItems().clear();
         avoidRoom.getItems().addAll(galleryAPI.getNames());
-        avoidRoom.setPromptText("Room");
+        avoidRoom.setPromptText("Avoid");
     }
 
     public void resetWaypoints() {
@@ -239,6 +253,7 @@ public class Controller implements Initializable {
 
     public void clearMap() {
         mainPane.getChildren().clear();
+        view.setImage(galleryAPI.getGalleryImage());
     }
 
     public void showBreadthSearchBox() {
@@ -247,6 +262,18 @@ public class Controller implements Initializable {
         } else {
             breadthFirstBox.setVisible(false);
         }
+    }
+
+    public void changeDijstrasColor(ActionEvent actionEvent) {
+        dijkstraColor = dijkstrasColorPicker.getValue();
+    }
+
+    public void changeDepthColor(ActionEvent actionEvent) {
+        depthColor = depthColorPicker.getValue();
+    }
+
+    public void changeBreadthColor(ActionEvent actionEvent) {
+        breathColor = breadthColorPicker.getValue();
     }
 }
 
