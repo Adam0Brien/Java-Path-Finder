@@ -241,42 +241,44 @@ public class GalleryAPI {
         int cost = 1;
         for (int x = 0; x < breadthSearchImage.getWidth(); x++) {
             for (int y = 0; y < breadthSearchImage.getHeight(); y++) {
-                if (breadthSearchImage.getPixelReader().getColor(x,y).equals(Color.BLACK)) continue;
-                GraphNode<Pixel> node = new GraphNode<>(new Pixel(x,y));
-                pixelNodes.add(node);
-                hashMap.put(node.data.toString(), node);
+                if (breadthSearchImage.getPixelReader().getColor(x, y).equals(Color.WHITE)) {
+                    GraphNode<Pixel> node = new GraphNode<>(new Pixel(x, y));
+                    pixelNodes.add(node);
+                    hashMap.put(node.data.toString(), node);
+                }
             }
         }
         for (int x = 0; x < breadthSearchImage.getWidth(); x++) {
             for (int y = 0; y < breadthSearchImage.getHeight(); y++) {
-                if (breadthSearchImage.getPixelReader().getColor(x, y).equals(Color.BLACK)) continue;
+                if (breadthSearchImage.getPixelReader().getColor(x, y).equals(Color.WHITE)) {
 
-                GraphNode<Pixel> current = findPixel(new Pixel(x,y));
-                //Below current pixel
-                int belowX = x;
-                int belowY = y + 1;
-                if (belowY < breadthSearchImage.getHeight()) {
-                    if (!breadthSearchImage.getPixelReader().getColor(belowX, belowY).equals(Color.BLACK)) {
-                        GraphNode<Pixel> pixel = findPixel(new Pixel(belowX, belowY));
-                        current.connectToNodeUndirected(pixel, cost);
+                    GraphNode<Pixel> current = findPixel(new Pixel(x, y));
+                    //Below current pixel
+                    int belowX = x;
+                    int belowY = y + 1;
+                    if (belowY < breadthSearchImage.getHeight()) {
+                        if (breadthSearchImage.getPixelReader().getColor(belowX, belowY).equals(Color.WHITE)) {
+                            GraphNode<Pixel> pixel = findPixel(new Pixel(belowX, belowY));
+                            current.connectToNodeUndirected(pixel, cost);
+                        }
                     }
-                }
-                //Right of current pixel
-                int rightX = x + 1;
-                int rightY = y;
-                if (rightX < breadthSearchImage.getWidth()) {
-                    if (!breadthSearchImage.getPixelReader().getColor(rightX, rightY).equals(Color.BLACK)) {
-                        GraphNode<Pixel> pixel = findPixel(new Pixel(rightX, rightY));
-                        current.connectToNodeUndirected(pixel, cost);
+                    //Right of current pixel
+                    int rightX = x + 1;
+                    int rightY = y;
+                    if (rightX < breadthSearchImage.getWidth()) {
+                        if (breadthSearchImage.getPixelReader().getColor(rightX, rightY).equals(Color.WHITE)) {
+                            GraphNode<Pixel> pixel = findPixel(new Pixel(rightX, rightY));
+                            current.connectToNodeUndirected(pixel, cost);
+                        }
                     }
-                }
-                //diagonal down right to pixel
-                int diagX = x + 1;
-                int diagY = y + 1;
-                if (diagX < breadthSearchImage.getWidth() && diagY < breadthSearchImage.getHeight()) {
-                    if (!breadthSearchImage.getPixelReader().getColor(diagX, diagY).equals(Color.BLACK)) {
-                        GraphNode<Pixel> pixel = findPixel(new Pixel(diagX, diagY));
-                        current.connectToNodeUndirected(pixel, cost);
+                    //diagonal down right to pixel
+                    int diagX = x + 1;
+                    int diagY = y + 1;
+                    if (diagX < breadthSearchImage.getWidth() && diagY < breadthSearchImage.getHeight()) {
+                        if (breadthSearchImage.getPixelReader().getColor(diagX, diagY).equals(Color.WHITE)) {
+                            GraphNode<Pixel> pixel = findPixel(new Pixel(diagX, diagY));
+                            current.connectToNodeUndirected(pixel, cost);
+                        }
                     }
                 }
             }
@@ -287,8 +289,8 @@ public class GalleryAPI {
         int cost = 1;
         for (int x = 0; x < image.getWidth(); x++) {
             for (int y = 0; y < image.getHeight(); y++) {
-                if (image.getPixelReader().getColor(x,y).equals(Color.BLACK)) continue;
-                pixelNodes.add(new GraphNode<>(new Pixel(x,y)));
+                if (image.getPixelReader().getColor(x, y).equals(Color.BLACK)) continue;
+                pixelNodes.add(new GraphNode<>(new Pixel(x, y)));
 
             }
         }
@@ -297,7 +299,7 @@ public class GalleryAPI {
             for (int y = 0; y < image.getHeight(); y++) {
                 if (image.getPixelReader().getColor(x, y).equals(Color.BLACK)) continue;
 
-                GraphNode<Pixel> current = findPixel(new Pixel(x,y));
+                GraphNode<Pixel> current = findPixel(new Pixel(x, y));
                 //System.out.println(current.data);
                 //Below current pixel
                 int belowX = x;

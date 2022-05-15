@@ -11,6 +11,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import main.Driver;
 import model.CostOfPath;
@@ -54,7 +55,7 @@ public class Controller implements Initializable {
     private GalleryAPI galleryAPI;
     private List<String> waypointsList , interestsList;
     private Pixel startPixel, destinationPixel;
-
+    private Circle startCircle, endCircle;
 
     /**
      * On startup loads the map of the art gallery and makes all the connections for each room
@@ -67,9 +68,15 @@ public class Controller implements Initializable {
         this.interestsList = galleryAPI.getPointsOfInterest();
         view.setImage(galleryAPI.getGalleryImage());
 
-        System.out.println(galleryAPI.getGalleryImage().getWidth() + "x" + galleryAPI.getGalleryImage().getHeight());
-        System.out.println(galleryAPI.getBreadthSearchImage().getWidth() + "x" + galleryAPI.getGalleryImage().getHeight());
-        System.out.println(view.getFitWidth() + "x" + view.getFitHeight());
+        mainPane.setPrefHeight(view.getFitHeight());
+
+        startCircle = new Circle();
+        startCircle.setRadius(3);
+        startCircle.setFill(Color.RED);
+        endCircle = new Circle();
+        endCircle.setRadius(3);
+        endCircle.setFill(Color.RED);
+
         ToggleGroup toggleGroup = new ToggleGroup();
         startCorrdsButton.setToggleGroup(toggleGroup);
         destinationCorrdsButton.setToggleGroup(toggleGroup);
@@ -87,27 +94,31 @@ public class Controller implements Initializable {
 
     public void setDeadthFirstSearchPixels(MouseEvent e) {
         if (!breadthFirstButton.isSelected()) return;
+
         int x = (int) ((e.getX() / view.getFitWidth()) * galleryAPI.getBreadthSearchImage().getWidth());
         int y = (int) ((e.getY() / view.getFitHeight()) * galleryAPI.getBreadthSearchImage().getHeight());
-        System.out.println("E: " + e.getX() + ", " + e.getY());
-        System.out.println("Calculated: " + x + ", " + y);
+
+
         if (!galleryAPI.getBreadthSearchImage().getPixelReader().getColor(x, y).equals(Color.BLACK)) {
             if (startCorrdsButton.isSelected()) {
                 startPixel = new Pixel(x, y);
                 startCorrdsLabel.setText("X: " + x + " Y: " + y);
                 startCorrdsButton.setSelected(false);
+                mainPane.getChildren().remove(startCircle);
+                startCircle.setLayoutX(e.getX());
+                startCircle.setLayoutY(e.getY());
+                mainPane.getChildren().add(startCircle);
             }
             if (destinationCorrdsButton.isSelected()) {
                 destinationPixel = new Pixel(x, y);
                 destinationCorrdsLabel.setText("X: " + x + " Y: " + y);
                 destinationCorrdsButton.setSelected(false);
+                mainPane.getChildren().remove(endCircle);
+                endCircle.setLayoutX(e.getX());
+                endCircle.setLayoutY(e.getY());
+                mainPane.getChildren().add(endCircle);
             }
-//            System.out.println("True");
         }
-//        System.out.println(e.getX() +  ", " + e.getY());
-//        System.out.println(x + ", " +  y);
-//        Color c = galleryAPI.getGalleryImage().getPixelReader().getColor(x,y);
-//        System.out.println(c.getRed()*255 + ", " + c.getGreen()*255 + ", " + c.getBlue()*255);
     }
 
 
@@ -129,7 +140,6 @@ public class Controller implements Initializable {
             CostOfPath cp = Graph.searchGraphDepthFirstCheapestPath(galleryAPI.findGraphNode(start.getValue()), null, 0, galleryAPI.findGraphNode(destination.getValue()).data);
 
             newPath = cp.pathList;
-            System.out.println(cp.pathCost);
         }
         drawSinglePath(newPath, Color.RED);
     }
@@ -142,13 +152,12 @@ public class Controller implements Initializable {
             t = Graph.findAllPathsDepthFirst(galleryAPI.findGraphNode(start.getValue()), null, galleryAPI.findGraphNode(destination.getValue()).data);
             TreeItem<String> root = new TreeItem<>("Routes");
             for (List<GraphNode<?>> list : t) {
-                //System.out.println("Route");
                 TreeItem<String> item = new TreeItem<>("Route");
                 for (GraphNode<?> node : list) {
                     Room room = (Room) node.data;
                     TreeItem<String> subItem = new TreeItem<>(room.getRoomName());
                     item.getChildren().add(subItem);
-                    //System.out.println("\t" + room.getRoomName());
+
                 }
                 root.getChildren().add(item);
             }
@@ -165,7 +174,7 @@ public class Controller implements Initializable {
         Image image = galleryAPI.getGalleryImage();
         WritableImage writableImage = new WritableImage(image.getPixelReader(), (int)image.getWidth(), (int)image.getHeight());
         for (GraphNode<Pixel> p : pixels){
-            writableImage.getPixelWriter().setColor(p.data.getXCorrd(), p.data.getYCoord()+20, Color.ORANGE);
+            writableImage.getPixelWriter().setColor(p.data.getXCorrd(), p.data.getYCoord(), Color.ORANGE);
         }
         view.setImage(writableImage);
     }
@@ -184,7 +193,6 @@ public class Controller implements Initializable {
             CostOfPath cp = Graph.findCheapestPathDijkstra(galleryAPI.findGraphNode(start.getValue()), galleryAPI.findGraphNode(destination.getValue()).data);
 
             pathList = cp.pathList;
-            //System.out.println(cp.pathCost);
         }
 
 
