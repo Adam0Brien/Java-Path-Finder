@@ -32,11 +32,11 @@ public class Controller implements Initializable {
     @FXML
     ImageView finalView;
     @FXML
-    ComboBox<String> start, destination, waypoints,pointsOfInterest;
+    ComboBox<String> start, destination, waypoints, pointsOfInterest;
     @FXML
     AnchorPane anchorpane;
     @FXML
-    ListView waypointView , interestsView;
+    ListView waypointView, interestsView;
     @FXML
     ListView avoidView;
     @FXML
@@ -50,15 +50,19 @@ public class Controller implements Initializable {
     @FXML
     VBox breadthFirstBox;
     @FXML
-    Label startCorrdsLabel, destinationCorrdsLabel;
+    Label startCorrdsLabel, destinationCorrdsLabel, permNum, permLimitLabel;
     @FXML
     ColorPicker dijkstrasColorPicker, depthColorPicker, breadthColorPicker;
+    @FXML
+    TextField permChangeLimit;
+
 
     private GalleryAPI galleryAPI;
-    private List<String> waypointsList , interestsList;
+    private List<String> waypointsList, interestsList;
     private Pixel startPixel, destinationPixel;
     private Circle startCircle, endCircle;
     private Color dijkstraColor, depthColor, breathColor;
+    private int permLimit;
 
     /**
      * On startup loads the map of the art gallery and makes all the connections for each room
@@ -79,6 +83,11 @@ public class Controller implements Initializable {
         depthColorPicker.setValue(Color.RED);
         breathColor = Color.ORANGE;
         breadthColorPicker.setValue(Color.ORANGE);
+
+        permLimit = 20;
+        permChangeLimit.setText(String.valueOf(20));
+        permLimitLabel.setText("Limit: " + permLimit);
+        permNum.setText("Total: ");
 
         startCircle = new Circle();
         startCircle.setRadius(3);
@@ -101,7 +110,6 @@ public class Controller implements Initializable {
     }
 
 
-
     public void setDeadthFirstSearchPixels(MouseEvent e) {
         if (!breadthFirstButton.isSelected()) return;
 
@@ -110,7 +118,7 @@ public class Controller implements Initializable {
         System.out.println("======");
         System.out.println(e.getX() + ", " + e.getY());
         System.out.println("-------");
-        System.out.println(x+", " +y);
+        System.out.println(x + ", " + y);
 
         if (!galleryAPI.getBreadthSearchImage().getPixelReader().getColor(x, y).equals(Color.BLACK)) {
             if (startCorrdsButton.isSelected()) {
@@ -137,13 +145,16 @@ public class Controller implements Initializable {
 
     public void addWaypoint() {
         if (galleryAPI.getWaypointsList().contains(waypoints.getValue())) return;
+        if (waypoints.getValue() == null) return;
         waypointView.getItems().addAll(waypoints.getValue());
         waypointsList.add(waypoints.getValue());
     }
 
-    public void addInterest(){
+    public void addInterest() {
+        if(galleryAPI.getPointsOfInterstList().contains(pointsOfInterest.getValue())) return;
+        if (pointsOfInterest.getValue() == null) return;
         interestsView.getItems().addAll(pointsOfInterest.getValue());
-        interestsList.add(pointsOfInterest.getValue());
+        galleryAPI.getPointsOfInterstList().add(pointsOfInterest.getValue());
     }
 
     public void findDepthpath(ActionEvent actionEvent) {
@@ -165,8 +176,11 @@ public class Controller implements Initializable {
         } else {
             t = Graph.findAllPathsDepthFirst(galleryAPI.findGraphNode(start.getValue()), null, galleryAPI.findGraphNode(destination.getValue()).data);
             TreeItem<String> root = new TreeItem<>("Routes");
+            int counter = 0;
+            int route = 1;
             for (List<GraphNode<?>> list : t) {
-                TreeItem<String> item = new TreeItem<>("Route");
+                if (counter >= permLimit) break;
+                TreeItem<String> item = new TreeItem<>("Route " + route);
                 for (GraphNode<?> node : list) {
                     Room room = (Room) node.data;
                     TreeItem<String> subItem = new TreeItem<>(room.getRoomName());
@@ -174,9 +188,12 @@ public class Controller implements Initializable {
 
                 }
                 root.getChildren().add(item);
+                counter++;
+                route++;
             }
             routeTreeView.setRoot(root);
             routeTreeView.setShowRoot(false);
+            permNum.setText("Total: " + t.size());
         }
 
 
@@ -184,10 +201,10 @@ public class Controller implements Initializable {
 
 
     public void findbreadthpath(ActionEvent actionEvent) {
-        List<GraphNode<Pixel>> pixels = (List<GraphNode<Pixel>>) galleryAPI.breadthFirstSearch(startPixel,destinationPixel);
+        List<GraphNode<Pixel>> pixels = (List<GraphNode<Pixel>>) galleryAPI.breadthFirstSearch(startPixel, destinationPixel);
         Image image = galleryAPI.getGalleryImage();
-        WritableImage writableImage = new WritableImage(image.getPixelReader(), (int)image.getWidth(), (int)image.getHeight());
-        for (GraphNode<Pixel> p : pixels){
+        WritableImage writableImage = new WritableImage(image.getPixelReader(), (int) image.getWidth(), (int) image.getHeight());
+        for (GraphNode<Pixel> p : pixels) {
             writableImage.getPixelWriter().setColor(p.data.getXCorrd(), p.data.getYCoord(), breathColor);
         }
         view.setImage(writableImage);
@@ -203,7 +220,7 @@ public class Controller implements Initializable {
 //        else if (!interestsList.isEmpty()) {
 //            pathList = galleryAPI.interestsSupport(start.getValue(),destination.getValue(),Algo.Dijkstra);
 //        }
-        else{
+        else {
             CostOfPath cp = Graph.findCheapestPathDijkstra(galleryAPI.findGraphNode(start.getValue()), galleryAPI.findGraphNode(destination.getValue()).data);
 
             pathList = cp.pathList;
@@ -274,6 +291,20 @@ public class Controller implements Initializable {
 
     public void changeBreadthColor(ActionEvent actionEvent) {
         breathColor = breadthColorPicker.getValue();
+    }
+
+    public void changePermLimit(ActionEvent actionEvent) {
+        try {
+            permLimit = Integer.parseInt(permChangeLimit.getText());
+            permLimitLabel.setText("Limit: " + permLimit);
+        } catch (Exception e) {
+            System.err.println("Error " + e);
+        }
+    }
+
+    public void clearPOI(ActionEvent actionEvent) {
+        interestsView.getItems().clear();
+        galleryAPI.getPointsOfInterstList().clear();
     }
 }
 

@@ -25,6 +25,7 @@ public class GalleryAPI {
     private List<String> waypointsList;
 
     private List<String> pointsOfInterest;
+    private List<String> pointsOfInterstList;
 
 
     public GalleryAPI() {
@@ -32,6 +33,7 @@ public class GalleryAPI {
         this.hashMap = new HashMap<>();
         this.rooms = new LinkedList<>();
         this.names = new ArrayList<>();
+        this.pointsOfInterstList = new ArrayList<>();
         this.pointsOfInterest = new ArrayList<>();
         this.roomNodes = new LinkedList<>();
         this.pixelNodes = new LinkedList<>();
@@ -44,6 +46,14 @@ public class GalleryAPI {
         System.out.println("Building Graph");
         buildPixelGraph();
         System.out.println("Building done");
+    }
+
+    public List<String> getPointsOfInterstList() {
+        return pointsOfInterstList;
+    }
+
+    public void setPointsOfInterstList(List<String> pointsOfInterstList) {
+        this.pointsOfInterstList = pointsOfInterstList;
     }
 
     public List<String> getPointsOfInterest() {
