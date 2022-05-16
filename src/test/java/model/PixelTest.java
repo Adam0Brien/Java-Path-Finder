@@ -30,6 +30,7 @@ class PixelTest {
     void tearDown() {
         pixel2 = null;
         pixel1 = null;
+        pixels = null;
     }
 
     @Test
@@ -49,5 +50,15 @@ class PixelTest {
         pixel2.setYCoord(45);
         assertTrue(pixels.contains(pixel1));
         assertTrue(pixels.contains(pixel2));
+    }
+
+    @Test
+    void testGettersAndSetters(){
+        assertEquals(129, pixel1.getXCorrd());
+        assertEquals(45, pixel1.getYCoord());
+        pixel1.setXCorrd(90);
+        pixel1.setYCoord(10);
+        assertEquals(90, pixel1.getXCorrd());
+        assertEquals(10, pixel1.getYCoord());
     }
 }
