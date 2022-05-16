@@ -1,3 +1,3 @@
 # JavaFx Path Finder
 
-<img src="Path Finder.png" alt="Dijkstras Algorithm">
+<img src="routeFinder.png" alt="Dijkstras Algorithm">
