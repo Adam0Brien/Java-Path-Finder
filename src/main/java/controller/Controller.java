@@ -108,9 +108,7 @@ public class Controller implements Initializable {
         pointsOfInterest.getItems().addAll(galleryAPI.getPointsOfInterestNames());
         breadthFirstBox.setVisible(false);
 
-        for (Circle c : galleryAPI.rectangles){
-            mainPane.getChildren().add(c);
-        }
+        inputTooltip();
 
     }
 
@@ -170,6 +168,7 @@ public class Controller implements Initializable {
             newPath = cp.pathList;
         }
         drawSinglePath(newPath, depthColor);
+
     }
 
     public void findAllDepthpaths(ActionEvent actionEvent) {
@@ -231,6 +230,7 @@ public class Controller implements Initializable {
 
 
         drawSinglePath(pathList, dijkstraColor);
+
     }
 
     public void drawSinglePath(List<GraphNode<?>> pathList, Color c) {
@@ -248,6 +248,7 @@ public class Controller implements Initializable {
             }
 
         }
+        inputTooltip();
     }
 
 
@@ -274,6 +275,7 @@ public class Controller implements Initializable {
     public void clearMap() {
         mainPane.getChildren().clear();
         view.setImage(galleryAPI.getGalleryImage());
+        inputTooltip();
     }
 
     public void showBreadthSearchBox() {
@@ -308,6 +310,12 @@ public class Controller implements Initializable {
     public void clearPOI(ActionEvent actionEvent) {
         interestsView.getItems().clear();
         galleryAPI.getPointsOfInterstList().clear();
+    }
+
+    public void inputTooltip(){
+        for (Circle c : galleryAPI.rectangles){
+            mainPane.getChildren().add(c);
+        }
     }
 }
 
