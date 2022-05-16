@@ -21,7 +21,6 @@ import utils.Graph;
 import model.GraphNode;
 import model.Room;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.*;
 
@@ -72,7 +71,7 @@ public class Controller implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         galleryAPI = Driver.galleryAPI;
         this.waypointsList = galleryAPI.getWaypointsList();
-        this.interestsList = galleryAPI.getPointsOfInterest();
+        this.interestsList = galleryAPI.getPointsOfInterestNames();
         view.setImage(galleryAPI.getGalleryImage());
         //view.setImage(galleryAPI.getBreadthSearchImage());
         mainPane.setPrefHeight(view.getFitHeight());
@@ -104,7 +103,7 @@ public class Controller implements Initializable {
         destination.getItems().addAll(galleryAPI.getNames());
         avoidRoom.getItems().addAll(galleryAPI.getNames());
         waypoints.getItems().addAll(galleryAPI.getNames());
-        pointsOfInterest.getItems().addAll(galleryAPI.getPointsOfInterest());
+        pointsOfInterest.getItems().addAll(galleryAPI.getPointsOfInterestNames());
         breadthFirstBox.setVisible(false);
 
     }

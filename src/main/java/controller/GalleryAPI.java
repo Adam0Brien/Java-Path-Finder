@@ -5,7 +5,6 @@ import javafx.scene.paint.Color;
 import model.*;
 import utils.Algo;
 import utils.Graph;
-import utils.Utilities;
 
 import java.io.*;
 import java.util.*;
@@ -24,7 +23,7 @@ public class GalleryAPI {
     private List<GraphNode<Room>> avoidedRooms;
     private List<String> waypointsList;
 
-    private List<String> pointsOfInterest;
+    private List<String> pointsOfInterestNames;
     private List<String> pointsOfInterstList;
 
 
@@ -34,7 +33,7 @@ public class GalleryAPI {
         this.rooms = new LinkedList<>();
         this.names = new ArrayList<>();
         this.pointsOfInterstList = new ArrayList<>();
-        this.pointsOfInterest = new ArrayList<>();
+        this.pointsOfInterestNames = new ArrayList<>();
         this.roomNodes = new LinkedList<>();
         this.pixelNodes = new LinkedList<>();
         this.roomsHashMap = new HashMap<>();
@@ -56,12 +55,12 @@ public class GalleryAPI {
         this.pointsOfInterstList = pointsOfInterstList;
     }
 
-    public List<String> getPointsOfInterest() {
-        return pointsOfInterest;
+    public List<String> getPointsOfInterestNames() {
+        return pointsOfInterestNames;
     }
 
-    public void setPointsOfInterest(List<String> pointsOfInterest) {
-        this.pointsOfInterest = pointsOfInterest;
+    public void setPointsOfInterestNames(List<String> pointsOfInterestNames) {
+        this.pointsOfInterestNames = pointsOfInterestNames;
     }
 
     public List<GraphNode<Pixel>> getPixelNodes() {
@@ -148,7 +147,7 @@ public class GalleryAPI {
                 roomNodes.add(node);
                 roomsHashMap.put(values[0], node);
                 names.add(values[0]);
-                if (!pointsOfInterest.contains(values[3])) pointsOfInterest.add(values[3]);
+                if (!pointsOfInterestNames.contains(values[3])) pointsOfInterestNames.add(values[3]);
                 rooms.add(r);
 
             }
@@ -229,17 +228,17 @@ public class GalleryAPI {
 
     public List<GraphNode<?>> interestsSupport(String start, String destination, Algo type) {
         List<GraphNode<?>> pathList = new LinkedList<>();
-        pointsOfInterest.add(destination);
+        pointsOfInterstList.add(destination);
         GraphNode<Room> startNode = findGraphNode(start);
 
-        for (String interest : pointsOfInterest) {
+        for (String interest : pointsOfInterestNames) {
             GraphNode<Room> interestNode = findGraphNode(interest);
             CostOfPath temp = (type.equals(Algo.Depth)) ? Graph.searchGraphDepthFirstCheapestPath(startNode, null, 0, interestNode.data) : Graph.findCheapestPathDijkstra(startNode, interestNode.data);
             assert temp != null;
             pathList.addAll(temp.pathList);
             startNode = interestNode;
         }
-        waypointsList.remove(destination);
+        pointsOfInterstList.remove(destination);
         return pathList;
     }
 
