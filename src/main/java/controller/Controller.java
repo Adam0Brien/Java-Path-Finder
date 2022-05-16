@@ -120,10 +120,6 @@ public class Controller implements Initializable {
 
         int x = (int) ((e.getX() / view.getFitWidth()) * galleryAPI.getBreadthSearchImage().getWidth());
         int y = (int) ((e.getY() / view.getFitHeight()) * galleryAPI.getBreadthSearchImage().getHeight());
-        System.out.println("======");
-        System.out.println(e.getX() + ", " + e.getY());
-        System.out.println("-------");
-        System.out.println(x + ", " + y);
 
         if (!galleryAPI.getBreadthSearchImage().getPixelReader().getColor(x, y).equals(Color.BLACK)) {
             if (startCorrdsButton.isSelected()) {

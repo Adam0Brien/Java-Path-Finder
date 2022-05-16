@@ -167,11 +167,9 @@ public class GalleryAPI {
                 Circle c = new Circle(Integer.parseInt(values[1]), Integer.parseInt(values[2]), 6);
 
                 c.setFill(Color.TRANSPARENT);
-                c.setStroke(Color.RED);
-                c.setStrokeWidth(2);
                 rectangles.add(c);
-
-                Tooltip.install(c, new Tooltip("Room Number: " + r.getRoomName() + "\nDetails : " + c));
+                Tooltip t = new Tooltip("Room Number: " + r.getRoomName() + "\nExibit : " + r.getExhibit() + "\nDate: " + r.getDate());
+                Tooltip.install(c,t);
 
 
                 if (!pointsOfInterestNames.contains(values[3])) pointsOfInterestNames.add(values[3]);
