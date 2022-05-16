@@ -42,9 +42,7 @@ public class GalleryAPI {
         this.breadthSearchImage = new Image(getClass().getResourceAsStream("/images/floorplan-level-2-july-2020-breadth-search.jpg"));
         readInDatabase();
         connectRooms();
-        System.out.println("Building Graph");
         buildPixelGraph();
-        System.out.println("Building done");
     }
 
     public List<String> getPointsOfInterstList() {
@@ -344,10 +342,6 @@ public class GalleryAPI {
     }
 
     public GraphNode<Pixel> findPixel(Pixel lookingFor) {
-//        for (GraphNode<Pixel> current : pixelNodes) {
-//            if (current.data.equals(lookingFor)) return current;
-//        }
-//        return null;
         return hashMap.get(lookingFor.toString());
     }
 
