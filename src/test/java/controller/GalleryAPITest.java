@@ -40,4 +40,9 @@ class GalleryAPITest {
         assertEquals(galleryAPI.getPixelNodes().get(2), galleryAPI.findPixel(galleryAPI.getPixelNodes().get(2).data));
         assertEquals(galleryAPI.getPixelNodes().get(3), galleryAPI.findPixel(galleryAPI.getPixelNodes().get(3).data));
     }
+
+    @Test
+    void findGraphNodeByInterest(){
+        assertEquals(galleryAPI.findGraphNode("Shop"), galleryAPI.findGraphNodeByInterest("Shop"));
+    }
 }

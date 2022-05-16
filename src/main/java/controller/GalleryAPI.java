@@ -113,6 +113,16 @@ public class GalleryAPI {
         return roomsHashMap.get(roomName);
     }
 
+    public GraphNode<Room> findGraphNodeByInterest(String interest){
+        for (Room r : rooms){
+            //System.out.println(r.getRoomName() + ", " + r.getExhibit());
+            if (r.getExhibit().equals(interest)){
+                return findGraphNode(r.getRoomName());
+            }
+        }
+        return null;
+    }
+
     public List<String> getNames() {
         return names;
     }
@@ -226,17 +236,16 @@ public class GalleryAPI {
 
     public List<GraphNode<?>> interestsSupport(String start, String destination, Algo type) {
         List<GraphNode<?>> pathList = new LinkedList<>();
-        pointsOfInterstList.add(destination);
         GraphNode<Room> startNode = findGraphNode(start);
-
-        for (String interest : pointsOfInterestNames) {
-            GraphNode<Room> interestNode = findGraphNode(interest);
+        for (String interest : pointsOfInterstList) {
+            GraphNode<Room> interestNode = findGraphNodeByInterest(interest);
             CostOfPath temp = (type.equals(Algo.Depth)) ? Graph.searchGraphDepthFirstCheapestPath(startNode, null, 0, interestNode.data) : Graph.findCheapestPathDijkstra(startNode, interestNode.data);
             assert temp != null;
             pathList.addAll(temp.pathList);
             startNode = interestNode;
         }
-        pointsOfInterstList.remove(destination);
+
+        pathList.addAll((type.equals(Algo.Depth)) ? Graph.searchGraphDepthFirstCheapestPath(startNode, null, 0, findGraphNode(destination).data).pathList : Graph.findCheapestPathDijkstra(startNode, findGraphNode(destination).data).pathList);
         return pathList;
     }
 

@@ -57,7 +57,7 @@ public class Controller implements Initializable {
 
 
     private GalleryAPI galleryAPI;
-    private List<String> waypointsList, interestsList;
+    private List<String> waypointsList, interestsNames, POI;
     private Pixel startPixel, destinationPixel;
     private Circle startCircle, endCircle;
     private Color dijkstraColor, depthColor, breathColor;
@@ -71,7 +71,8 @@ public class Controller implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         galleryAPI = Driver.galleryAPI;
         this.waypointsList = galleryAPI.getWaypointsList();
-        this.interestsList = galleryAPI.getPointsOfInterestNames();
+        this.interestsNames = galleryAPI.getPointsOfInterestNames();
+        this.POI = galleryAPI.getPointsOfInterstList();
         view.setImage(galleryAPI.getGalleryImage());
         //view.setImage(galleryAPI.getBreadthSearchImage());
         mainPane.setPrefHeight(view.getFitHeight());
@@ -150,7 +151,7 @@ public class Controller implements Initializable {
     }
 
     public void addInterest() {
-        if(galleryAPI.getPointsOfInterstList().contains(pointsOfInterest.getValue())) return;
+        if (galleryAPI.getPointsOfInterstList().contains(pointsOfInterest.getValue())) return;
         if (pointsOfInterest.getValue() == null) return;
         interestsView.getItems().addAll(pointsOfInterest.getValue());
         galleryAPI.getPointsOfInterstList().add(pointsOfInterest.getValue());
@@ -160,6 +161,8 @@ public class Controller implements Initializable {
         List<GraphNode<?>> newPath;
         if (!waypointsList.isEmpty()) {
             newPath = galleryAPI.waypointSupport(start.getValue(), destination.getValue(), Algo.Depth);
+        } else if (!POI.isEmpty()) {
+            newPath = galleryAPI.interestsSupport(start.getValue(), destination.getValue(), Algo.Depth);
         } else {
             CostOfPath cp = Graph.searchGraphDepthFirstCheapestPath(galleryAPI.findGraphNode(start.getValue()), null, 0, galleryAPI.findGraphNode(destination.getValue()).data);
 
@@ -216,9 +219,9 @@ public class Controller implements Initializable {
         if (!waypointsList.isEmpty()) {
             pathList = galleryAPI.waypointSupport(start.getValue(), destination.getValue(), Algo.Dijkstra);
         }
-//        else if (!interestsList.isEmpty()) {
-//            pathList = galleryAPI.interestsSupport(start.getValue(),destination.getValue(),Algo.Dijkstra);
-//        }
+        else if (!POI.isEmpty()) {
+            pathList = galleryAPI.interestsSupport(start.getValue(),destination.getValue(),Algo.Dijkstra);
+        }
         else {
             CostOfPath cp = Graph.findCheapestPathDijkstra(galleryAPI.findGraphNode(start.getValue()), galleryAPI.findGraphNode(destination.getValue()).data);
 

@@ -19,7 +19,7 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Controller">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="610.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Controller">
   <children>
     <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="609.0" prefWidth="1102.0" VBox.vgrow="ALWAYS">
          <children>
@@ -40,9 +40,9 @@
                               <Label fx:id="fileSize1" layoutX="76.0" layoutY="113.0" prefHeight="17.0" prefWidth="65.0" />
                               <AnchorPane fx:id="mainPane" layoutX="40.0" layoutY="96.0" onMouseClicked="#setDeadthFirstSearchPixels" prefHeight="420.0" prefWidth="416.0">
                               </AnchorPane>
-                              <VBox layoutX="502.0" layoutY="4.0" prefHeight="555.0" prefWidth="593.0">
+                              <VBox layoutX="502.0" layoutY="4.0" prefHeight="573.0" prefWidth="594.0">
                                  <children>
-                                    <HBox prefHeight="206.0" prefWidth="593.0" spacing="10.0">
+                                    <HBox prefHeight="218.0" prefWidth="594.0" spacing="10.0">
                                        <children>
                                           <VBox prefHeight="191.0" prefWidth="150.0" spacing="5.0">
                                              <children>
@@ -96,7 +96,7 @@
                                        </children>
                                     </HBox>
                                     <Separator prefWidth="200.0" />
-                                    <HBox prefHeight="254.0" prefWidth="593.0" spacing="10.0">
+                                    <HBox prefHeight="266.0" prefWidth="594.0" spacing="10.0">
                                        <children>
                                           <VBox prefHeight="176.0" prefWidth="200.0" spacing="5.0">
                                              <children>
@@ -158,7 +158,7 @@
                                        </children>
                                     </HBox>
                                     <Separator layoutX="10.0" layoutY="201.0" prefWidth="200.0" />
-                                    <VBox prefHeight="148.0" prefWidth="593.0" spacing="5.0">
+                                    <VBox prefHeight="142.0" prefWidth="594.0" spacing="5.0">
                                        <children>
                                           <Label text="Algorithms" textFill="#9f9f9f">
                                              <font>
