@@ -1,7 +1,10 @@
 package controller;
 
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
 import model.*;
 import utils.Algo;
 import utils.Graph;
@@ -27,6 +30,9 @@ public class GalleryAPI {
     private List<String> pointsOfInterstList;
 
 
+    public List<Circle> rectangles;
+
+
     public GalleryAPI() {
         this.waypointsList = new LinkedList<>();
         this.hashMap = new HashMap<>();
@@ -40,6 +46,7 @@ public class GalleryAPI {
         this.avoidedRooms = new LinkedList<>();
         this.galleryImage = new Image(getClass().getResourceAsStream("/images/floorplan-level-2-july-2020.jpg"));
         this.breadthSearchImage = new Image(getClass().getResourceAsStream("/images/floorplan-level-2-july-2020-breadth-search.jpg"));
+        this.rectangles = new LinkedList();
         readInDatabase();
         connectRooms();
         buildPixelGraph();
@@ -113,10 +120,10 @@ public class GalleryAPI {
         return roomsHashMap.get(roomName);
     }
 
-    public GraphNode<Room> findGraphNodeByInterest(String interest){
-        for (Room r : rooms){
+    public GraphNode<Room> findGraphNodeByInterest(String interest) {
+        for (Room r : rooms) {
             //System.out.println(r.getRoomName() + ", " + r.getExhibit());
-            if (r.getExhibit().equals(interest)){
+            if (r.getExhibit().equals(interest)) {
                 return findGraphNode(r.getRoomName());
             }
         }
@@ -155,6 +162,18 @@ public class GalleryAPI {
                 roomNodes.add(node);
                 roomsHashMap.put(values[0], node);
                 names.add(values[0]);
+
+
+                Circle c = new Circle(Integer.parseInt(values[1]), Integer.parseInt(values[2]), 6);
+
+                c.setFill(Color.TRANSPARENT);
+                c.setStroke(Color.RED);
+                c.setStrokeWidth(2);
+                rectangles.add(c);
+
+                Tooltip.install(c, new Tooltip("Room Number: " + r.getRoomName() + "\nDetails : " + c));
+
+
                 if (!pointsOfInterestNames.contains(values[3])) pointsOfInterestNames.add(values[3]);
                 rooms.add(r);
 

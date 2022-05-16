@@ -13,6 +13,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
+import javafx.scene.shape.Rectangle;
 import main.Driver;
 import model.CostOfPath;
 import model.Pixel;
@@ -106,6 +107,10 @@ public class Controller implements Initializable {
         waypoints.getItems().addAll(galleryAPI.getNames());
         pointsOfInterest.getItems().addAll(galleryAPI.getPointsOfInterestNames());
         breadthFirstBox.setVisible(false);
+
+        for (Circle c : galleryAPI.rectangles){
+            mainPane.getChildren().add(c);
+        }
 
     }
 
